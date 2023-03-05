@@ -58,3 +58,20 @@ Temperature Sensor and EEPROM
 - Programmable Resolution from 9 Bits to 12 Bits  
 - Voltage Range on Any Pin Relative to Ground -0.5V to +6.0V  
 
+## Rechargeable Battery  
+This module should be self powered and be able to run for extended periods of time that ideally could be in months. Solar re-charging may be required.  
+### LP963450 EEMB Lithium Polymer Battery Rechargeable Battery Pack, 3.7V 1800 mAh with Wire JST ###
+$16.99 from Amazon as on 3/5/2023  
+https://www.amazon.com/dp/B08ZCQXFX4?ref=ppx_yo2ov_dt_b_product_details&th=1  
+__THIS IS NOT UNIVERSAL!!! It will cause a short if the polarity of the battery connector does not match your device.__  
+_Check the connection and switch leads as appropriate._  
+* Voltage: DC 3.7V  
+* Typical capacity: 1800 mAh, Min capacity: 1700 mAh  
+*  Weight: 36 g  (~1.3 oz)
+* Size: 34.5 x 52 x 9.9 mm (WxLxH) (1.36 x 2.05 x 0.39 inches)  
+* PCM protection function: over charge, over discharge, over current, short circuit protection, over temperature protection  
+
+![Battery Specifications](Specification_Dcouments/71Fxr+4uA-L._AC_SX679_.jpg "LP963450 Specifications")  
+  
+![Battery Dimensions](Specification_Dcouments/61d6W+f6iIL._AC_SL1500_.jpg "LP963450 Dimensions") 
+

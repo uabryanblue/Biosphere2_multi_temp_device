@@ -27,3 +27,10 @@ Hardware that is capable of going to sleep, waking to take temperature readings,
 * Have built in WiFi  
 * Easy field replacement and repair  
 
+## Battery Powered  
+The microcontroller needs to be battery powered for extened periods of time.  
+* prefer JST connector for replacement without soldering  
+* Rechargeable Lithium Polymer pack, or equivalent  
+* 1800 mAh or greater  
+* needs to be low charge protected  
+
