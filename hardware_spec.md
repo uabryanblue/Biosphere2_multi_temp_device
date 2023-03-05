@@ -40,6 +40,7 @@ Manufacturer Sample code from: http://www.nodemcu.com/index_en.html
     ds18b20 = nil  
     package.loaded["ds18b20"]=nil  
 
+![ESP8266 NodeMCU CP2102 ESP-12E Pins](Specification_Dcouments/NodeMCU-ESP8266-Pinout.jpg "ESP8266 NodeMCU CP2102 ESP-12E Pins")
 
 ## Temperature Sensors  
 A small profile, inexpensive temperature sesnsor that can easily be replicated using a single wire bus.
