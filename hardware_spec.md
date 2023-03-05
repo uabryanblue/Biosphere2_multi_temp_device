@@ -48,7 +48,7 @@ A small profile, inexpensive temperature sesnsor that can easily be replicated u
  https://www.amazon.com/dp/B07MR71WVS?psc=1&ref=ppx_yo2ov_dt_b_product_details  
  This link may be to a knockoff: "Also it not an authentic DALLAS"  
  __Need pull up resistor of 4.7K ohm.__  
-Technical specifications can be found here: [DS18B20 TO-92 3 Pin]()
+Technical specifications can be found here: [DS18B20 TO-92 3 Pin](Specification_Dcouments/604-00070-DS18B20-Manufacturer-Datasheet.pdf)
 - Unique 1-Wire® Interface Requires Only One Port
 Pin for Communication  
 - Reduce Component Count with Integrated
