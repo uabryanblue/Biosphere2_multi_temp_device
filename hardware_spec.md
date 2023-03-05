@@ -57,7 +57,8 @@ Temperature Sensor and EEPROM
 - ±0.5°C Accuracy from -10°C to +85°C  
 - Programmable Resolution from 9 Bits to 12 Bits  
 - Voltage Range on Any Pin Relative to Ground -0.5V to +6.0V  
-
+![DS18B20 TO-92 3 Pins](Specification_Dcouments/DS18B20-TO-92_pins.jpg "DS18B20 TO-92 3 Pins")  
+  
 ## Rechargeable Battery  
 This module should be self powered and be able to run for extended periods of time that ideally could be in months. Solar re-charging may be required.  
 ### LP963450 EEMB Lithium Polymer Battery Rechargeable Battery Pack, 3.7V 1800 mAh with Wire JST ###
