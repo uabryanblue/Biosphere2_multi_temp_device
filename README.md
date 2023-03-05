@@ -17,14 +17,13 @@ This device must be:
   * weatherproof
   * small and lightweight
   * low power use
-  * long lead lengths of several meters 
+  * can have long lead lengths attached of several meters 
 
-## Microprocessor
-Hardware that is capable of going to sleep, waking to take temperature readings, and then go back to sleep.
-### ESP32 Based
-* Have low power consumption and can be put to sleep
-* Support most common sensor communication protocals
-* Have built in WiFi
-* SparkFun has modules that can be chained together with small boards
-  * Easy field replacement and repair
-  * No soldering required
+## Microprocessor  
+Hardware that is capable of going to sleep, waking to take temperature readings, and then go back to sleep.  
+### ESP Based  
+* Have low power consumption and can be put to sleep  
+* Support most common sensor communication protocals  
+* Have built in WiFi  
+* Easy field replacement and repair  
+
