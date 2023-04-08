@@ -4,8 +4,10 @@ except:
     import socket
 
 import machine
+import uerrno
+import db_post
 
-def web_page():
+def web_page(db_str, mytime):
     # display the true value of the led
     # ON = value 0, OFF = value 1
     if led.value() == 0:
@@ -57,6 +59,8 @@ def web_page():
         <i class="far fa-lightbulb fa-3x" style="color:#000000;"></i>
         <a href=\"?led_off\"><button class="button button1">LED OFF</button></a>
     </p>
+    <p>
+        <p>DATABASE - TIME: """ + mytime + "<strong> SQL: " + db_str + """</strong></p>
 </body>
 
 </html>"""
@@ -70,7 +74,10 @@ Hello #%d from MicroPython!
 """
 
 
-def main(micropython_optimize=False):
+def main():
+    led_state = "ON" # initialize state
+
+
     s = socket.socket()
 
     # Binding to all interfaces - server will be accessible to other hosts!
@@ -87,7 +94,7 @@ def main(micropython_optimize=False):
     while True:
         try:
             res = s.accept()
-            s.settimeout(10)
+            s.settimeout(15)
             client_sock = res[0]
             client_addr = res[1]
             print("Client address:", client_addr)
@@ -107,26 +114,62 @@ def main(micropython_optimize=False):
             client_stream = client_sock # micropython optimized
 
             print("Request:")
-            req = client_stream.readline()
-            print(f'first reg: {req}')
-            while True:
+            req = client_stream.readline() # read first line for processing args
+
+            print(f'-first reg: {req}')         
+            led_on = str(req).find('led_on')
+            led_off = str(req).find('led_off')
+            print(f'led_on: {led_on} led_off: {led_off}')
+            
+            while True: # read all of the response line by line
                 h = client_stream.readline()
                 if h == b"" or h == b"\r\n":
                     break
                 print(f'h: {h}')
+
+
+            valid_state = True
+            if led_on > 0: # this is brute force searching for parameters
+                print('---LED ON -> GPIO2')
+                # led_state = "ON"
+                led.off()
+            elif led_off > 0:
+                print('---LED OFF -> GPIO2')
+                # led_state = "OFF"
+                led.on()
+            else:
+                valid_state = False
+                print('-----LED STATE NOT PASSED-----')
+
+            db_response = 'No Valide Values'
+            if valid_state: # initial load, or no valid params, don't do anything
+                # send data to database
+                db_response = 'http://biosphere2.000webhostapp.com/dbwrite.php?val1=' + str(float(led_on)) + '&val2=' + str(float(led_off))
+                print(f'{db_response}\n')
+                html = db_post.fetch(db_response)
+                print('------------------------')
+                print(html)
+                print('------------------------')
+
             # client_stream.write(CONTENT % counter)
-            CONTENT = web_page()
+            current_time = time.localtime()
+            formatted_time = "{:02d}/{:02d}/{} {:02d}:{:02d}:{:02d} ".format(current_time[2], current_time[1], current_time[0], current_time[3], current_time[4], current_time[5])           
+            CONTENT = web_page(db_response, formatted_time)
             CONTENT = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n' + CONTENT
             client_stream.write(CONTENT)
             client_stream.close()
             client_sock.close()
-            # if not micropython_optimize:
-            #     client_sock.close()
             counter += 1
-            print()
+            print(counter)
+            print('')
+
+
         except OSError as e:
-            # machine.reset()
-            client_sock.close()
-            print(f'OSError: Connection closed {e}')
+            if e.args[0] == uerrno.ETIMEDOUT: # standard timeout is okay, ignore it
+                print("ETIMEDOUT found") # timeout is okay, ignore it
+                pass
+            else: # general case, close the socket and continue processing, prevent hanging
+                client_sock.close()
+                print(f'OSError: Connection closed {e}')
 
 main()

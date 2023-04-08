@@ -31,6 +31,21 @@ while station.isconnected() == False:
 print('Connection successful')
 print(station.ifconfig())
 
+import ntptime
+import time
+
+#if needed, overwrite default time server
+ntptime.host = "1.europe.pool.ntp.org"
+
+try:
+    print("Local time before synchronization：%s" %str(time.localtime()))
+    #make sure to have internet connection
+    ntptime.settime()
+    print("Local time after synchronization：%s" %str(time.localtime()))
+except:
+    print("Error syncing time")
+
+
 led = Pin(2, Pin.OUT)
 # initialize the led as on
 led.on()
