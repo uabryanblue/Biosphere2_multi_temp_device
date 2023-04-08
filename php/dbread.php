@@ -20,8 +20,8 @@ else { echo "Connected to mysql database. <br>"; }
 
 // Select values from MySQL database table
 
-$sql = "SELECT id, val1, val2, date FROM nodemcu_table";  // Update your tablename here
-
+$sql = "SELECT id, val1, val2, date FROM nodemcu_table ORDER BY date DESC LIMIT 10";
+// echo $sql;
 $result = $conn->query($sql);
 
 echo "<center>";
