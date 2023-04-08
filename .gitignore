@@ -1,0 +1,4 @@
+*.bak2
+*.bak
+*.tmp
+micropython/000db-test-SQL-upload/000db-test-SQL-upload.code-workspace
