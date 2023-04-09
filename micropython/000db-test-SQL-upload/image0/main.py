@@ -13,8 +13,8 @@ try:
 except:
     import socket
 
-
 def web_page(db_str, mytime):
+
     """generate a canned HTML response
     Display: buttons for on/off control
     The current state of the led light
@@ -29,56 +29,126 @@ def web_page(db_str, mytime):
         gpio_state="OFF"
 
     # web page that is returned from server with variable information
-    html = """<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <style>
-        html {
-            font-family: Arial;
-            display: inline-block;
-            margin: 0px auto;
-            text-align: center;
-        }
 
-        .button {
-            background-color: #ce1b0e;
-            border: none;
-            color: white;
-            padding: 16px 40px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+    html = """<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Bryan Blue Biosphere 2 Sensor</title>
+        <style>
+            html {
+                font-family: Arial;
+                display: inline-block;
+                margin: 0px auto;
+                text-align: center;
+            }
 
-        .button1 {
-            background-color: #000000;
-        }
-    </style>
-</head>
+            .button {
+                background-color: #ce1b0e;
+                border: none;
+                color: white;
+                padding: 16px 40px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
 
-<body>
-    <h2>ESP82666 MicroPython Web Server</h2>
-    <h3>Biosphere 2 - Bryan Blue<h3>
-    <p>LED state: <strong>""" + gpio_state + """</strong></p>
-    <p>
-        <i class="fas fa-lightbulb fa-3x" style="color:#c81919;"></i>
-        <a href=\"?led_on\"><button class="button">LED ON</button></a>
-    </p>
-    <p>
-        <i class="far fa-lightbulb fa-3x" style="color:#000000;"></i>
-        <a href=\"?led_off\"><button class="button button1">LED OFF</button></a>
-    </p>
-    <p>
+            .button1 {
+                background-color: #000000;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h2>ESP82666 MicroPython Web Server</h2>
+            <h3>Biosphere 2 - Bryan Blue</h3>
+        </main>
+        <p><a href="https://www.lazuline.us"><img src="https://ci3.googleusercontent.com/mail-sig/AIorK4wbOK2u0GFF36ks7HM8C8S9pPd5X2BLfgBcLQSFolKbn7AX8B5hEYXj-6_bj1P93u4I6s6KEqEgTKbMEbZfjt_-ws2JTUcIy6Yqy-CpgQ" style="width:50px;height:50px;"></a></p>
+        <p>LED state: <strong>""" + gpio_state + """</strong></p>
+        <p>
+            <!-- i class="fas fa-lightbulb fa-3x" style="color:#c81919;"></i> -->
+            <a href="?led_on"><button class="button">LED ON</button></a>
+        </p>
+        <p>
+            <!-- i class="far fa-lightbulb fa-3x" style="color:#000000;"></i> -->
+            <a href="?led_off"><button class="button button1">LED OFF</button></a>
+        </p>
+        <p>
         <p>DATABASE - TIME: """ + mytime + "<strong> <BR>SQL: " + db_str + """</strong></p>
-</body>
-
+    </body>
 </html>"""
     return html
+
+# def web_page(db_str, mytime):
+#     """generate a canned HTML response
+#     Display: buttons for on/off control
+#     The current state of the led light
+#     Current date/time of the request  """
+    
+#     # display the true value of the led
+#     # ON = when led is physically 0
+#     # OFF = when led is physically 1
+#     if led.value() == 0:
+#         gpio_state="ON"
+#     else:
+#         gpio_state="OFF"
+
+#     # web page that is returned from server with variable information
+#     html = """<html>
+# <head>
+#     <meta name="viewport" content="width=device-width, initial-scale=1">
+#     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+#      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+#     <style>
+#         html {
+#             font-family: Arial;
+#             display: inline-block;
+#             margin: 0px auto;
+#             text-align: center;
+#         }
+
+#         .button {
+#             background-color: #ce1b0e;
+#             border: none;
+#             color: white;
+#             padding: 16px 40px;
+#             text-align: center;
+#             text-decoration: none;
+#             display: inline-block;
+#             font-size: 16px;
+#             margin: 4px 2px;
+#             cursor: pointer;
+#         }
+
+#         .button1 {
+#             background-color: #000000;
+#         }
+#     </style>
+# </head>
+
+# <body>
+#     <h2>ESP82666 MicroPython Web Server</h2>
+#     <h3>Biosphere 2 - Bryan Blue<h3>
+#     <p>LED state: <strong>""" + gpio_state + """</strong></p>
+#     <p>
+#         <i class="fas fa-lightbulb fa-3x" style="color:#c81919;"></i>
+#         <a href=\"?led_on\"><button class="button">LED ON</button></a>
+#     </p>
+#     <p>
+#         <i class="far fa-lightbulb fa-3x" style="color:#000000;"></i>
+#         <a href=\"?led_off\"><button class="button button1">LED OFF</button></a>
+#     </p>
+#     <p>
+#         <p>DATABASE - TIME: """ + mytime + "<strong> <BR>SQL: " + db_str + """</strong></p>
+# </body>
+
+# </html>"""
+#     return html
 
 
 # CONTENT = b"""\
