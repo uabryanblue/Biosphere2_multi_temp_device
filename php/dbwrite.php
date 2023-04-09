@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 
    
 // Get date and time variables
-    //date_default_timezone_set('Asia/Kolkata');  // for other timezones, refer:- https://www.php.net/manual/en/timezones.asia.php
+date_default_timezone_set('America/Phoenix');  // https://www.php.net/manual/en/timezones.america.php
 //    $d = date("Y-m-d");
 //    $t = date("H:i:s");
 
