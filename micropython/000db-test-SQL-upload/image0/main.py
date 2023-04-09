@@ -156,7 +156,7 @@ def main():
                 print('------------------------')
 
             # client_stream.write(CONTENT % counter)
-            current_time = time.localtime()
+            current_time = time.localtime(time.time() + UTC_OFFSET)
             formatted_time = "{:02d}/{:02d}/{} {:02d}:{:02d}:{:02d} ".format(current_time[2], current_time[1], current_time[0], current_time[3], current_time[4], current_time[5])           
             CONTENT = web_page(db_response, formatted_time)
             CONTENT = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n' + CONTENT
