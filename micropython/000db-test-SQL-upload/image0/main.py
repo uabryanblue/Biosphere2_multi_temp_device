@@ -1,22 +1,35 @@
+# Biosphere 2 remote sensing project
+# Bryan Blue
+# bryanblue@arizona.edu
+# Spring 2023
+
+
+import db_post # code module that handles communiction with remote MySQL database
+import machine
+import uerrno # error trapping and code values
+# try to use machine native socket if not use library
 try:
     import usocket as socket
 except:
     import socket
 
-import machine
-import uerrno
-import db_post
 
 def web_page(db_str, mytime):
+    """generate a canned HTML response
+    Display: buttons for on/off control
+    The current state of the led light
+    Current date/time of the request  """
+    
     # display the true value of the led
-    # ON = value 0, OFF = value 1
+    # ON = when led is physically 0
+    # OFF = when led is physically 1
     if led.value() == 0:
         gpio_state="ON"
     else:
         gpio_state="OFF"
 
+    # web page that is returned from server with variable information
     html = """<html>
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
@@ -49,7 +62,8 @@ def web_page(db_str, mytime):
 </head>
 
 <body>
-    <h2>ESP MicroPython Web Server</h2>
+    <h2>ESP82666 MicroPython Web Server</h2>
+    <h3>Biosphere 2 - Bryan Blue<h3>
     <p>LED state: <strong>""" + gpio_state + """</strong></p>
     <p>
         <i class="fas fa-lightbulb fa-3x" style="color:#c81919;"></i>
@@ -60,27 +74,28 @@ def web_page(db_str, mytime):
         <a href=\"?led_off\"><button class="button button1">LED OFF</button></a>
     </p>
     <p>
-        <p>DATABASE - TIME: """ + mytime + "<strong> SQL: " + db_str + """</strong></p>
+        <p>DATABASE - TIME: """ + mytime + "<strong> <BR>SQL: " + db_str + """</strong></p>
 </body>
 
 </html>"""
     return html
 
 
-CONTENT = b"""\
-HTTP/1.0 200 OK
+# CONTENT = b"""\
+# HTTP/1.0 200 OK
 
-Hello #%d from MicroPython!
-"""
+# Hello #%d from MicroPython!
+# """
 
 
 def main():
-    led_state = "ON" # initialize state
 
+    # initialize state of display variable
+    led_state = "ON"
 
+    # create a new socket to display web page
     s = socket.socket()
-
-    # Binding to all interfaces - server will be accessible to other hosts!
+    # localhost and port 666 (change to any valid port you wish to use)
     ai = socket.getaddrinfo("0.0.0.0", 666)
     print("Bind address info:", ai)
     addr = ai[0][-1]
@@ -88,31 +103,20 @@ def main():
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(addr)
     s.listen(5)
-    print("Listening, connect your browser to http://<this_host>:666/")
+    print("Listening, connect your browser to http://{addr}:666")
 
     counter = 0
     while True:
         try:
             res = s.accept()
-            s.settimeout(15)
+            s.settimeout(5)
             client_sock = res[0]
             client_addr = res[1]
             print("Client address:", client_addr)
             print("Client socket:", client_sock)
 
-            # if not micropython_optimize:
-            #     # To read line-oriented protocol (like HTTP) from a socket (and
-            #     # avoid short read problem), it must be wrapped in a stream (aka
-            #     # file-like) object. That's how you do it in CPython:
-            #     client_stream = client_sock.makefile("rwb")
-            # else:
-            #     # .. but MicroPython socket objects support stream interface
-            #     # directly, so calling .makefile() method is not required. If
-            #     # you develop application which will run only on MicroPython,
-            #     # especially on a resource-constrained embedded device, you
-            #     # may take this shortcut to save resources.
-            client_stream = client_sock # micropython optimized
-
+           
+            client_stream = client_sock 
             print("Request:")
             req = client_stream.readline() # read first line for processing args
 
@@ -122,10 +126,10 @@ def main():
             print(f'led_on: {led_on} led_off: {led_off}')
             
             while True: # read all of the response line by line
-                h = client_stream.readline()
-                if h == b"" or h == b"\r\n":
+                sr = client_stream.readline()
+                if sr == b"" or sr == b"\r\n":
                     break
-                print(f'h: {h}')
+                print(f'--sr: {sr}')
 
 
             valid_state = True
