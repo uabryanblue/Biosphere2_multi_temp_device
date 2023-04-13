@@ -4,33 +4,35 @@
 # Spring 2023
 
 
-import db_post # code module that handles communiction with remote MySQL database
+import db_post  # code module that handles communiction with remote MySQL database
 import machine
-import uerrno # error trapping and code values
+import uerrno  # error trapping and code values
+
 # try to use machine native socket if not use library
 try:
     import usocket as socket
 except:
     import socket
 
-def web_page(db_str, mytime):
 
+def web_page(db_str, mytime):
     """generate a canned HTML response
     Display: buttons for on/off control
     The current state of the led light
-    Current date/time of the request  """
-    
+    Current date/time of the request"""
+
     # display the true value of the led
     # ON = when led is physically 0
     # OFF = when led is physically 1
     if led.value() == 0:
-        gpio_state="ON"
+        gpio_state = "ON"
     else:
-        gpio_state="OFF"
+        gpio_state = "OFF"
 
     # web page that is returned from server with variable information
 
-    html = """<!DOCTYPE html>
+    html = (
+        """<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -69,7 +71,9 @@ def web_page(db_str, mytime):
             <h3>Biosphere 2 - Bryan Blue</h3>
         </main>
         <p><a href="https://www.lazuline.us"><img src="https://ci3.googleusercontent.com/mail-sig/AIorK4wbOK2u0GFF36ks7HM8C8S9pPd5X2BLfgBcLQSFolKbn7AX8B5hEYXj-6_bj1P93u4I6s6KEqEgTKbMEbZfjt_-ws2JTUcIy6Yqy-CpgQ" style="width:50px;height:50px;"></a></p>
-        <p>LED state: <strong>""" + gpio_state + """</strong></p>
+        <p>LED state: <strong>"""
+        + gpio_state
+        + """</strong></p>
         <p>
             <!-- i class="fas fa-lightbulb fa-3x" style="color:#c81919;"></i> -->
             <a href="?led_on"><button class="button">LED ON</button></a>
@@ -79,9 +83,14 @@ def web_page(db_str, mytime):
             <a href="?led_off"><button class="button button1">LED OFF</button></a>
         </p>
         <p>
-        <p>DATABASE - TIME: """ + mytime + "<strong> <BR>SQL: " + db_str + """</strong></p>
+        <p>DATABASE - TIME: """
+        + mytime
+        + "<strong> <BR>SQL: "
+        + db_str
+        + """</strong></p>
     </body>
 </html>"""
+    )
     return html
 
 
@@ -93,14 +102,14 @@ def main():
     # create a new socket to display web page
     s = socket.socket()
     # localhost and port 667 (change to any valid port you wish to use)
-    ai = socket.getaddrinfo("0.0.0.0", 667)
+    ai = socket.getaddrinfo("0.0.0.0", conf.PORT) 
     print("Bind address info:", ai)
     addr = ai[0][-1]
 
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(addr)
     s.listen(5)
-    print("Listening, connect your browser to http://{addr}:666")
+    print("Listening, connect your browser to http://{addr}")
 
     counter = 0
     while True:
@@ -112,65 +121,75 @@ def main():
             print("Client address:", client_addr)
             print("Client socket:", client_sock)
 
-           
-            client_stream = client_sock 
+            client_stream = client_sock
             print("Request:")
-            req = client_stream.readline() # read first line for processing args
+            req = client_stream.readline()  # read first line for processing args
 
-            print(f'-first reg: {req}')         
-            led_on = str(req).find('led_on')
-            led_off = str(req).find('led_off')
-            print(f'led_on: {led_on} led_off: {led_off}')
-            
-            while True: # read all of the response line by line
+            print(f"-first reg: {req}")
+            led_on = str(req).find("led_on")
+            led_off = str(req).find("led_off")
+            print(f"led_on: {led_on} led_off: {led_off}")
+
+            while True:  # read all of the response line by line
                 sr = client_stream.readline()
                 if sr == b"" or sr == b"\r\n":
                     break
-                print(f'--sr: {sr}')
-
+                print(f"--sr: {sr}")
 
             valid_state = True
-            if led_on > 0: # this is brute force searching for parameters
-                print('---LED ON -> GPIO2')
+            if led_on > 0:  # this is brute force searching for parameters
+                print("---LED ON -> GPIO2")
                 # led_state = "ON"
                 led.off()
             elif led_off > 0:
-                print('---LED OFF -> GPIO2')
+                print("---LED OFF -> GPIO2")
                 # led_state = "OFF"
                 led.on()
             else:
                 valid_state = False
-                print('-----LED STATE NOT PASSED-----')
+                print("-----LED STATE NOT PASSED-----")
 
-            db_response = 'No Valide Values'
-            if valid_state: # initial load, or no valid params, don't do anything
+            db_response = "No Valide Values"
+            if valid_state:  # initial load, or no valid params, don't do anything
                 # send data to database
-                db_response = 'http://biosphere2.000webhostapp.com/dbwrite.php?val1=' + str(float(led_on)) + '&val2=' + str(float(led_off))
-                print(f'{db_response}\n')
+                db_response = (
+                    "http://biosphere2.000webhostapp.com/dbwrite.php?val1="
+                    + str(float(led_on))
+                    + "&val2="
+                    + str(float(led_off))
+                )
+                print(f"{db_response}\n")
                 html = db_post.fetch(db_response)
-                print('------------------------')
+                print("------------------------")
                 print(html)
-                print('------------------------')
+                print("------------------------")
 
             # client_stream.write(CONTENT % counter)
-            current_time = time.localtime(time.time() + UTC_OFFSET)
-            formatted_time = "{:02d}/{:02d}/{} {:02d}:{:02d}:{:02d} ".format(current_time[2], current_time[1], current_time[0], current_time[3], current_time[4], current_time[5])           
+            current_time = time.localtime(time.time() + conf.UTC_OFFSET)
+            formatted_time = "{:02d}/{:02d}/{} {:02d}:{:02d}:{:02d} ".format(
+                current_time[2],
+                current_time[1],
+                current_time[0],
+                current_time[3],
+                current_time[4],
+                current_time[5],
+            )
             CONTENT = web_page(db_response, formatted_time)
-            CONTENT = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n' + CONTENT
+            CONTENT = "HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n" + CONTENT
             client_stream.write(CONTENT)
             client_stream.close()
             client_sock.close()
             counter += 1
             print(counter)
-            print('')
-
+            print("")
 
         except OSError as e:
-            if e.args[0] == uerrno.ETIMEDOUT: # standard timeout is okay, ignore it
-                print("ETIMEDOUT found") # timeout is okay, ignore it
+            if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it
+                print("ETIMEDOUT found")  # timeout is okay, ignore it
                 pass
-            else: # general case, close the socket and continue processing, prevent hanging
+            else:  # general case, close the socket and continue processing, prevent hanging
                 client_sock.close()
-                print(f'OSError: Connection closed {e}')
+                print(f"OSError: Connection closed {e}")
+
 
 main()

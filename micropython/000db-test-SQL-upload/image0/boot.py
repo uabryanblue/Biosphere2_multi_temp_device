@@ -13,7 +13,6 @@ except:
 # this is a config file to be used to pass values that can change dynamically
 import conf
 print("loaded config")
-print(conf.PORT)
 
 import esp
 esp.osdebug(None)
@@ -41,7 +40,7 @@ try:
     print("Local time before synchronization：%s" %str(time.localtime()))
     #make sure to have internet connection
     ntptime.settime()
-    print("Local time after synchronization：%s" %str(time.localtime(time.time() + UTC_OFFSET)))
+    print("Local time after synchronization：%s" %str(time.localtime(time.time() + conf.UTC_OFFSET)))
 except:
     print("Error syncing time")
 
