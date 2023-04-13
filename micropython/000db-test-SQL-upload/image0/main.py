@@ -38,7 +38,11 @@ def web_page(db_str, mytime):
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Bryan Blue Biosphere 2 Sensor</title>
+        <title>"""
+        + conf.MYNAME 
+        + """<br>"""
+        + conf.MYID 
+        + """</title>
         <style>
             html {
                 font-family: Arial;
@@ -67,8 +71,12 @@ def web_page(db_str, mytime):
     </head>
     <body>
         <main>
-            <h2>ESP82666 MicroPython Web Server</h2>
-            <h3>Biosphere 2 - Bryan Blue</h3>
+            <h2>"""
+            + conf.MYNAME
+            + """</h2>
+            <h3>"""
+            + conf.AUTHOR
+            + """</h3>
         </main>
         <p><a href="https://www.lazuline.us"><img src="https://ci3.googleusercontent.com/mail-sig/AIorK4wbOK2u0GFF36ks7HM8C8S9pPd5X2BLfgBcLQSFolKbn7AX8B5hEYXj-6_bj1P93u4I6s6KEqEgTKbMEbZfjt_-ws2JTUcIy6Yqy-CpgQ" style="width:50px;height:50px;"></a></p>
         <p>LED state: <strong>"""
@@ -83,9 +91,9 @@ def web_page(db_str, mytime):
             <a href="?led_off"><button class="button button1">LED OFF</button></a>
         </p>
         <p>
-        <p>DATABASE - TIME: """
+        <p>DATABASE<br>TIME: """
         + mytime
-        + "<strong> <BR>SQL: "
+        + "<strong> <br>SQL: "
         + db_str
         + """</strong></p>
     </body>
@@ -101,7 +109,7 @@ def main():
 
     # create a new socket to display web page
     s = socket.socket()
-    # localhost and port 667 (change to any valid port you wish to use)
+    # localhost has to be 0.0.0.0 and port 667 (change to any valid port you wish to use)
     ai = socket.getaddrinfo("0.0.0.0", conf.PORT) 
     print("Bind address info:", ai)
     addr = ai[0][-1]
