@@ -91,7 +91,7 @@ def web_page(db_str, mytime):
             <a href="?led_off"><button class="button button1">LED OFF</button></a>
         </p>
         <p>
-        <p>DATABASE<br>TIME: """
+        <p> CURRENT TIME: """
         + mytime
         + "<strong> <br>SQL: "
         + db_str

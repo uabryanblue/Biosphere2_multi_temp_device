@@ -4,7 +4,7 @@ AUTHOR = "Bryan Blue - bryanblue@arizona.edu"
 VERSION = "23.0.0"
 
 # DEVICE IDENTIFICATION
-MYID = 3
+MYID = "3"
 MYNAME = "ESP8266 MicroPython Temperature Server"
 
 
