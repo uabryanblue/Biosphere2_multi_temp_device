@@ -30,7 +30,7 @@ station.connect(ssid, password)
 while station.isconnected() == False:
   pass
 print('Connection successful')
-print(station.ifconfig())
+print(f'STATION: {station.ifconfig()}')
 
 #if needed, overwrite default time server
 # ntptime.host = "1.europe.pool.ntp.org"

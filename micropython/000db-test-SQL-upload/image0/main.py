@@ -84,79 +84,6 @@ def web_page(db_str, mytime):
 </html>"""
     return html
 
-# def web_page(db_str, mytime):
-#     """generate a canned HTML response
-#     Display: buttons for on/off control
-#     The current state of the led light
-#     Current date/time of the request  """
-    
-#     # display the true value of the led
-#     # ON = when led is physically 0
-#     # OFF = when led is physically 1
-#     if led.value() == 0:
-#         gpio_state="ON"
-#     else:
-#         gpio_state="OFF"
-
-#     # web page that is returned from server with variable information
-#     html = """<html>
-# <head>
-#     <meta name="viewport" content="width=device-width, initial-scale=1">
-#     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-#      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-#     <style>
-#         html {
-#             font-family: Arial;
-#             display: inline-block;
-#             margin: 0px auto;
-#             text-align: center;
-#         }
-
-#         .button {
-#             background-color: #ce1b0e;
-#             border: none;
-#             color: white;
-#             padding: 16px 40px;
-#             text-align: center;
-#             text-decoration: none;
-#             display: inline-block;
-#             font-size: 16px;
-#             margin: 4px 2px;
-#             cursor: pointer;
-#         }
-
-#         .button1 {
-#             background-color: #000000;
-#         }
-#     </style>
-# </head>
-
-# <body>
-#     <h2>ESP82666 MicroPython Web Server</h2>
-#     <h3>Biosphere 2 - Bryan Blue<h3>
-#     <p>LED state: <strong>""" + gpio_state + """</strong></p>
-#     <p>
-#         <i class="fas fa-lightbulb fa-3x" style="color:#c81919;"></i>
-#         <a href=\"?led_on\"><button class="button">LED ON</button></a>
-#     </p>
-#     <p>
-#         <i class="far fa-lightbulb fa-3x" style="color:#000000;"></i>
-#         <a href=\"?led_off\"><button class="button button1">LED OFF</button></a>
-#     </p>
-#     <p>
-#         <p>DATABASE - TIME: """ + mytime + "<strong> <BR>SQL: " + db_str + """</strong></p>
-# </body>
-
-# </html>"""
-#     return html
-
-
-# CONTENT = b"""\
-# HTTP/1.0 200 OK
-
-# Hello #%d from MicroPython!
-# """
-
 
 def main():
 
@@ -165,8 +92,8 @@ def main():
 
     # create a new socket to display web page
     s = socket.socket()
-    # localhost and port 666 (change to any valid port you wish to use)
-    ai = socket.getaddrinfo("0.0.0.0", 666)
+    # localhost and port 667 (change to any valid port you wish to use)
+    ai = socket.getaddrinfo("0.0.0.0", 667)
     print("Bind address info:", ai)
     addr = ai[0][-1]
 
