@@ -5,6 +5,13 @@ HTTP_REQUEST = 'GET /{path} HTTP/1.0\r\nHost: {host}\r\n\r\n'
 HTTP_PORT = 80
 BUFFER_SIZE = 1024
 
+def build_val_str(vals):
+    """take a dictionary of values and convert to HTML value string"""
+
+    vstr = '&'.join([f'{key}={value}' for key, value in sorted(vals.items())])    
+    print(f'FINAL VSTR:{vstr}')
+    return vstr
+
 def parse_url(url):
     return url.replace('http://', '').split('/', 1)
 
@@ -14,6 +21,7 @@ def get_ip(host, port=HTTP_PORT):
 
 def fetch(url):
     host, path = parse_url(url)
+    print(f'HOST:{host}, PATH:{path}')
     ip = get_ip(host)
     sock = socket.socket()
     sock.connect((ip, 80))
@@ -28,13 +36,3 @@ def fetch(url):
     sock.close()
     body = response.split(b'\r\n\r\n', 1)[1]
     return str(body, 'utf8')
-
-# def main():
-    # wait_for_networking()
-    
-
-# # html = fetch('http://micropython.org/ks/test.html')
-# html = fetch('http://biosphere2.000webhostapp.com/dbwrite.php?val1=10.3&val2=11.2')
-# print(html)
-
-# main()

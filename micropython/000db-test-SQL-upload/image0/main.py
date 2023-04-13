@@ -160,13 +160,17 @@ def main():
             db_response = "No Valide Values"
             if valid_state:  # initial load, or no valid params, don't do anything
                 # send data to database
-                db_response = (
-                    "http://biosphere2.000webhostapp.com/dbwrite.php?val1="
-                    + str(float(led_on))
-                    + "&val2="
-                    + str(float(led_off))
-                )
-                print(f"{db_response}\n")
+                # TODO: break this into variable number of parameters 
+                vars = dict()
+                vars["val1"] = float(led_on)
+                vars["val2"] = float(led_off)
+                val_str = db_post.build_val_str(vars)
+                db_response = """http://biosphere2.000webhostapp.com/dbwrite.php?""" + val_str
+                # + str(float(led_on))
+                # + "&val2="
+                # + str(float(led_off))
+                # )
+                print(f"SENDING: {db_response}\n")
                 html = db_post.fetch(db_response)
                 print("------------------------")
                 print(html)
