@@ -1,8 +1,9 @@
-# Biosphere 2 remote sensing project
-# Bryan Blue
-# bryanblue@arizona.edu
-# Spring 2023
-
+"""
+ Biosphere 2 remote sensing project
+ Bryan Blue
+ bryanblue@arizona.edu
+ Spring 2023
+"""
 
 import db_post  # code module that handles communiction with remote MySQL database
 import machine
@@ -39,9 +40,9 @@ def web_page(db_str, mytime):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>"""
-        + conf.MYNAME 
+        + conf.MYNAME
         + """<br>"""
-        + conf.MYID 
+        + conf.MYID
         + """</title>
         <style>
             html {
@@ -72,11 +73,11 @@ def web_page(db_str, mytime):
     <body>
         <main>
             <h2>"""
-            + conf.MYNAME
-            + """</h2>
+        + conf.MYNAME
+        + """</h2>
             <h3>"""
-            + conf.AUTHOR
-            + """</h3>
+        + conf.AUTHOR
+        + """</h3>
         </main>
         <p><a href="https://www.lazuline.us"><img src="https://ci3.googleusercontent.com/mail-sig/AIorK4wbOK2u0GFF36ks7HM8C8S9pPd5X2BLfgBcLQSFolKbn7AX8B5hEYXj-6_bj1P93u4I6s6KEqEgTKbMEbZfjt_-ws2JTUcIy6Yqy-CpgQ" style="width:50px;height:50px;"></a></p>
         <p>LED state: <strong>"""
@@ -103,14 +104,13 @@ def web_page(db_str, mytime):
 
 
 def main():
-
     # initialize state of display variable
     led_state = "ON"
 
     # create a new socket to display web page
     s = socket.socket()
     # localhost has to be 0.0.0.0 and port 667 (change to any valid port you wish to use)
-    ai = socket.getaddrinfo("0.0.0.0", conf.PORT) 
+    ai = socket.getaddrinfo("0.0.0.0", conf.PORT)
     print("Bind address info:", ai)
     addr = ai[0][-1]
 
@@ -160,12 +160,14 @@ def main():
             db_response = "No Valide Values"
             if valid_state:  # initial load, or no valid params, don't do anything
                 # send data to database
-                # TODO: break this into variable number of parameters 
-                vars = dict()
+                # TODO: break this into variable number of parameters
+                vars = {}
                 vars["val1"] = float(led_on)
                 vars["val2"] = float(led_off)
                 val_str = db_post.build_val_str(vars)
-                db_response = """http://biosphere2.000webhostapp.com/dbwrite.php?""" + val_str
+                db_response = (
+                    """http://biosphere2.000webhostapp.com/dbwrite.php?""" + val_str
+                )
                 # + str(float(led_on))
                 # + "&val2="
                 # + str(float(led_off))
@@ -177,7 +179,8 @@ def main():
                 print("------------------------")
 
             # client_stream.write(CONTENT % counter)
-            current_time = time.localtime(time.time() + conf.UTC_OFFSET)
+            current_time = time.localtime(time.time())  # + conf.UTC_OFFSET)
+            # formatted_time = f"{current_time[2]:02d}"
             formatted_time = "{:02d}/{:02d}/{} {:02d}:{:02d}:{:02d} ".format(
                 current_time[2],
                 current_time[1],
@@ -198,7 +201,7 @@ def main():
         except OSError as e:
             if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it
                 print("ETIMEDOUT found")  # timeout is okay, ignore it
-                pass
+                pass # TODO remove this, un needed
             else:  # general case, close the socket and continue processing, prevent hanging
                 client_sock.close()
                 print(f"OSError: Connection closed {e}")

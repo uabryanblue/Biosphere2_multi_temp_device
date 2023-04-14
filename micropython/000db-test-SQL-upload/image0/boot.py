@@ -34,17 +34,10 @@ print(f"STATION: {station.ifconfig()}")
 
 # set current date time with appropriate offset for timezone -7 is Tucson
 ntptime.host = conf.NTP_HOST
-time.localtime(time.time() + conf.UTC_OFFSET)
 try:
-    print(f"Local time befor NTP: {str(time.localtime() + conf.UTC_OFFSET)}")
-    # print("Local time before synchronization：%s" % str(time.localtime()))
-    # make sure to have internet connection
+    print(f"Local time before NTP: {str(time.localtime())}")
     ntptime.settime()
-    print(f"Local time befor NTP: {str(time.localtime() + conf.UTC_OFFSET)}")
-    # print(
-    #     "Local time after synchronization：%s"
-    #     % str(time.localtime(time.time() + conf.UTC_OFFSET))
-    # )
+    print(f"Local time after NTP: {str(time.localtime(time.time() + conf.UTC_OFFSET))}")
 except:
     print("Error syncing time")
 
