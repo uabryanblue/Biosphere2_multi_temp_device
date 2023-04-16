@@ -168,6 +168,8 @@ def main():
                 db_response = (
                     """http://biosphere2.000webhostapp.com/dbwrite.php?""" + val_str
                 )
+                # db_response = """https://lazuline.us/blog/f/rescue-orchid-3?and=4"""
+
                 # + str(float(led_on))
                 # + "&val2="
                 # + str(float(led_off))
@@ -201,7 +203,6 @@ def main():
         except OSError as e:
             if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it
                 print("ETIMEDOUT found")  # timeout is okay, ignore it
-                pass # TODO remove this, un needed
             else:  # general case, close the socket and continue processing, prevent hanging
                 client_sock.close()
                 print(f"OSError: Connection closed {e}")
