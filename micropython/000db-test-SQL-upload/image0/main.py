@@ -16,7 +16,7 @@ except:
     import socket
 
 
-def web_page(db_str, mytime):
+def web_page(db_str, mytime, html_resp):
     """generate a canned HTML response
     Display: buttons for on/off control
     The current state of the led light
@@ -97,6 +97,9 @@ def web_page(db_str, mytime):
         + "<strong> <br>SQL: "
         + db_str
         + """</strong></p>
+        <p> DATABASE RESPONSE: """
+        + html_resp
+        + """</p>
     </body>
 </html>"""
     )
@@ -166,7 +169,7 @@ def main():
                 vars["val2"] = float(led_off)
                 val_str = db_post.build_val_str(vars)
                 db_response = (
-                    """http://biosphere2.000webhostapp.com/dbwrite.php?""" + val_str
+                    conf.DB_URL + "?" + val_str
                 )
                 # db_response = """https://lazuline.us/blog/f/rescue-orchid-3?and=4"""
 
@@ -175,9 +178,13 @@ def main():
                 # + str(float(led_off))
                 # )
                 print(f"SENDING: {db_response}\n")
-                html = db_post.fetch(db_response)
+                html_resp = db_post.fetch(db_response)
+                # TODO this response chechking needs to  made into a function in db_post.py
+                # standard URL response codes are not sufficient
+                if html_resp.find("ERROR") == -1: # we did not find error in the response, assume ok
+                    html_resp = "RESPONSE OK"
                 print("------------------------")
-                print(html)
+                print(html_resp)
                 print("------------------------")
 
             # client_stream.write(CONTENT % counter)
@@ -191,7 +198,7 @@ def main():
                 current_time[4],
                 current_time[5],
             )
-            CONTENT = web_page(db_response, formatted_time)
+            CONTENT = web_page(db_response, formatted_time, html_resp)
             CONTENT = "HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n" + CONTENT
             client_stream.write(CONTENT)
             client_stream.close()

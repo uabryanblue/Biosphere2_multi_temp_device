@@ -36,7 +36,8 @@ def check_return_code(chunk):
 
 def fetch(url):
     """build the final url that sends data to the remote database"""
-
+    # TODO this needs refactored, much of the print statemets can be removed
+    # PHP pages should return status based on sucess or failure to update the DB
     try:
         print("++++++++++++++++++BEGIN++++++++++++++++++++++++++")
         host, path = parse_url(url)
@@ -53,26 +54,27 @@ def fetch(url):
         chunk = sock.recv(BUFFER_SIZE)
         code = check_return_code(str(chunk))
         try:
-            assert (code < "201")
+            assert (code < "400") # anything below 400 is not a clienter or server error
         except:
             sock.close()
-            return f"ERROR CODE: {code}"
-        # if code == "403":
-        #     raise Exception(f"INVALID RESPONSE:{code}:")
+            return str(f"ERROR CODE: {code}", "utf8")
+
         print(f'******************* found code:{code}:')
         print(f"chunk: {chunk}")
-        response += chunk
+        response = chunk # comaptibility for the dump loop below
         
-        while chunk:
-            chunk = sock.recv(BUFFER_SIZE)
-            print(f"================= NEXTchunk: {chunk}")
-            # if not chunk:
-            #     break
-            response += chunk
+        # causes memeory errors if the entire response is read in at once
+        # rework, but the response is not needed
+        # while chunk:
+        #     chunk = sock.recv(BUFFER_SIZE)
+        #     print(f"================= NEXTchunk: {chunk}")
+        #     # if not chunk:
+        #     #     break
+        #     response += chunk
         sock.close()
 
         print(f"final resonponse to split {response}")
-        body = response.split(b"\r\n\r\n", 1)[1]
+        body = response.split(b"\r\n", 1)[1]
         print(body)
         print("++++++++++++++++++++END++++++++++++++++++++++++")
         return str(body, "utf8")
