@@ -19,7 +19,9 @@ def build_val_str(vals):
 def parse_url(url):
     """break url into host and remaining path"""
 
-    return url.replace("http://", "").split("/", 1)
+    # this could be refactored
+    g = url.split('/',3)[2:4]
+    return g
 
 
 def get_ip(host, port=HTTP_PORT):
@@ -28,22 +30,75 @@ def get_ip(host, port=HTTP_PORT):
     addr_info = socket.getaddrinfo(host, port)
     return addr_info[0][-1][0]
 
+def check_return_code(chunk):
+    # return the html response code, the 2nd string space delimited
+    return chunk.split(' ',2)[1]
+
 def fetch(url):
     """build the final url that sends data to the remote database"""
 
-    host, path = parse_url(url)
-    print(f"HOST:{host}, PATH:{path}")
-    ip = get_ip(host)
-    sock = socket.socket()
-    sock.connect((ip, 80))
-    request = HTTP_REQUEST.format(host=host, path=path)
-    sock.send(bytes(request, "utf8"))
-    response = b""
-    while True:
+    try:
+        print("++++++++++++++++++BEGIN++++++++++++++++++++++++++")
+        host, path = parse_url(url)
+        print(f"HOST:{host}, PATH:{path}")
+        ip = get_ip(host)
+        sock = socket.socket()
+        sock.connect((ip, 80))
+        print(f"connected to {ip}")
+        request = HTTP_REQUEST.format(host=host, path=path)
+        if sock.send(bytes(request, "utf8")):
+            print(f"sent successfully: {request}")
+        response = b"" # initialize binary variable to hold response
+        
         chunk = sock.recv(BUFFER_SIZE)
-        if not chunk:
-            break
+        code = check_return_code(str(chunk))
+        try:
+            assert (code < "201")
+        except:
+            sock.close()
+            return f"ERROR CODE: {code}"
+        # if code == "403":
+        #     raise Exception(f"INVALID RESPONSE:{code}:")
+        print(f'******************* found code:{code}:')
+        print(f"chunk: {chunk}")
         response += chunk
-    sock.close()
-    body = response.split(b"\r\n\r\n", 1)[1]
-    return str(body, "utf8")
+        
+        while chunk:
+            chunk = sock.recv(BUFFER_SIZE)
+            print(f"================= NEXTchunk: {chunk}")
+            # if not chunk:
+            #     break
+            response += chunk
+        sock.close()
+
+        print(f"final resonponse to split {response}")
+        body = response.split(b"\r\n\r\n", 1)[1]
+        print(body)
+        print("++++++++++++++++++++END++++++++++++++++++++++++")
+        return str(body, "utf8")
+
+    except (NameError, TypeError) as error:
+        print(f"general error handling: {error}")
+
+
+    except MemoryError as e:
+        print(f"!!!!!!!! 1 error detected: {e}     {e.args[0]}")
+        sock.close() # should use with statement
+        return "MEMORY ERROR"
+    except OSError as e:
+        print(f"!!!!!!!! 2 error detected: {e}     {e.args[0]}")
+        sock.close() # should use with statement        
+        # if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it
+        #     print("ETIMEDOUT found")  # timeout is okay, ignore it
+        # else:  # general case, close the socket and continue processing, prevent hanging
+        #     print("no error")
+        #     # client_sock.close()
+        #     # print(f"OSError: Connection closed {e}")
+        return "OS ERROR"
+    else:
+        sock.close() # should use with statement
+        print("++++++++++++++++++++ELSE++++++++++++++++++++++++")
+        return "NOTHING HERE"
+
+
+
