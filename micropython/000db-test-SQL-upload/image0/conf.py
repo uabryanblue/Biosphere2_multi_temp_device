@@ -7,14 +7,28 @@ AUTHOR = "Bryan Blue - bryanblue@arizona.edu"
 VERSION = "23.0.0"
 
 # DEVICE IDENTIFICATION
-MYID = "3"
+MYID = "2"
 MYNAME = "ESP8266 MicroPython Temperature Server"
 
 
-# NETWORK
-PORT = 667
+"""NETWORK CONFIGURATION"""
+# --HOME--
 WAP_SSID = "DEA_VAN3"
 WAP_PSWD = "Help1Sago8!MoMo"
+# unit 1 use port 666
+# unit 2 use port 667
+PORT = 667
+
+# --BIOSPHERE 2--
+# publice IP: 150.135.165.93
+# WAP_SSID = "b2science"
+# WAP_PSWD = ""
+# PORT = 80
+
+# --test direct--
+# WAP_SSID = "MicroPython-e37cfc"
+# WAP_PSWD = "micropythoN"
+# PORT = 80
 
 # TIMESERVER
 NTP_HOST = "3.netbsd.pool.ntp.org"
