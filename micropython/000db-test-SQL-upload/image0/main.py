@@ -46,11 +46,19 @@ while True:
 
 # relay code
   D5.on()
-  sleep(30)
+  sleep(15)
   D5.off()
+  sleep(1)
 
   D6.on()
-  sleep(8)
+  sleep(15)
+  D6.off()
+  sleep(1)
+
+  D5.on()
+  D6.on()
+  sleep(30)
+  D5.off()
   D6.off()
 
   sleep(3)
