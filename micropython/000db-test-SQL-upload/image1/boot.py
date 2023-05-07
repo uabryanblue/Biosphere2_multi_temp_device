@@ -6,23 +6,23 @@
 """
 
 import gc
-import time
+# import time
 import esp
 
 esp.osdebug(None)
 from machine import Pin
-import network
-import ntptime
+# import network
+# import ntptime
 
-# this is a config file to be used to pass values that can change dynamically
-import conf
+# # this is a config file to be used to pass values that can change dynamically
+# import conf
 
-try:
-    import usocket as socket
-except:
-    import socket
+# try:
+#     import usocket as socket
+# except:
+#     import socket
 
-gc.collect()
+# gc.collect()
 # # setup netword connection
 # station = network.WLAN(network.STA_IF)
 # station.active(True)
@@ -42,9 +42,9 @@ gc.collect()
 #     print("Error syncing time")
 
 # initialize pin for led control
-led = Pin(2, Pin.OUT)
-# initialize the led as on
-led.on()
+# led = Pin(2, Pin.OUT)
+# # initialize the led as on
+# led.on()
 
 
 
