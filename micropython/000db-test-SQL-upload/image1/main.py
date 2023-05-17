@@ -37,7 +37,13 @@ while True:
     cs2.on()
     temp2 = temp_c(data)
 
-    print(f"TEMP1: {temp1:5} TEMP2: {temp2:5}")
+    # temp1_corrected = (1.4077 * temp1) + 56.524
+    # temp1_corrected = (0.7821 * temp1) + 13.624
+    # temp1_corrected = (0.0112*temp1*temp1) +0.4884*temp1 + 6.0622
+    temp1_corrected = (0.006*temp1*temp1) +0.6248*temp1 + 9.5735
+    
+
+    print(f"TEMP1: {temp1:5} TEMP1 Coorected: {temp1_corrected:5} TEMP2: {temp2:5}")
 
 
     sleep(1)
