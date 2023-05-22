@@ -6,7 +6,7 @@
 """
 import conf
 import gc
-# import time
+import time
 import realtc
 import sd
 import esp
@@ -18,6 +18,8 @@ realtc.rtcinit()
 print("set time")
 
 sd.initSD()
+
+time.sleep(0.5)
 ###########################
 # TURN ON LATER FOR ntp WiFi SUPPORT
 # import network
