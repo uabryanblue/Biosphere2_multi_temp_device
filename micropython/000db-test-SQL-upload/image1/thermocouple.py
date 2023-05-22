@@ -1,9 +1,6 @@
 import machine
 from time import sleep
 
-print("START")
-
-print("good to go")
 
 def temp_c(data):
     temp = data[0] << 8 | data[1]
@@ -14,15 +11,16 @@ def temp_c(data):
         temp -= 16384  # Sign bit set, take 2's compliment.
     return temp * 0.25
 
-data = bytearray(4)
-spi = machine.SPI(1, baudrate=5000000, polarity=0, phase=0)
-cs = machine.Pin(15, machine.Pin.OUT) # main
-cs2 = machine.Pin(13, machine.Pin.OUT) # try a second
+def takereading():
+    data = bytearray(4)
+    spi = machine.SPI(1, baudrate=5000000, polarity=0, phase=0)
+    cs = machine.Pin(16, machine.Pin.OUT) # main
+    cs2 = machine.Pin(0, machine.Pin.OUT) # try a second
 
-cs.on()
-cs2.on()
+    cs.on()
+    cs2.on()
 
-while True:
+    # while True:
 
     cs.off()
     spi.readinto(data)
@@ -42,5 +40,6 @@ while True:
 
     print(f"TEMP1: {temp1:5} TEMP1 Coorected: {temp1_corrected:5} TEMP2: {temp2:5}")
 
+    return temp1_corrected
 
-    sleep(1)
+        # sleep(1)
