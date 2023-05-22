@@ -8,6 +8,7 @@ import conf
 import gc
 # import time
 import realtc
+import sd
 import esp
 
 esp.osdebug(None)
@@ -15,6 +16,8 @@ esp.osdebug(None)
 print("booting")
 realtc.rtcinit()
 print("set time")
+
+sd.initSD()
 ###########################
 # TURN ON LATER FOR ntp WiFi SUPPORT
 # import network
