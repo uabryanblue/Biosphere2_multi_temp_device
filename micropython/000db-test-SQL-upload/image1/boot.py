@@ -4,13 +4,19 @@
   bryanblue@arizona.edu
  Spring 2023
 """
-
+import conf
 import gc
 # import time
+import realtc
 import esp
 
 esp.osdebug(None)
-from machine import Pin
+
+print("booting")
+realtc.rtcinit()
+print("set time")
+###########################
+# TURN ON LATER FOR ntp WiFi SUPPORT
 # import network
 # import ntptime
 
