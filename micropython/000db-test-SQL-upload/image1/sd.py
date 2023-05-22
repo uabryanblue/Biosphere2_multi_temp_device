@@ -3,6 +3,7 @@
 
 import machine, sdcard, os
 from machine import Pin, SPI
+import time
 
 def initSD():
     print("mounting /logs")
@@ -10,6 +11,7 @@ def initSD():
     vfs = os.VfsFat(sd)
     os.mount(vfs, '/logs')
     # os.listdir('/logs/')
+    time.sleep(0.01)
     listFiles = os.listdir('/logs')
     if len(listFiles) > 0:
         print(f"file(s) in /logs {listFiles}")
