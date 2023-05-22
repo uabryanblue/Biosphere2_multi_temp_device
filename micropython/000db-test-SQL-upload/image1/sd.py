@@ -18,6 +18,8 @@ def initSD():
     else:
         print("no file!")
 
+def closeSD():
+    os.umount('/logs')
 # vfs = os.VfsFat(sd)
 # os.mount(vfs, “/fc”)
 

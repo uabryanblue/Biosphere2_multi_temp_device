@@ -1,6 +1,7 @@
 import machine
 from time import sleep
 # import logger
+import sd
 import thermocouple
 
 print("START")
@@ -28,6 +29,7 @@ with open(fn, "r") as f:
         print(line)
 print("end of log")
 
+# sd.closeSD()
 
 # logger.write_log("This is a test.", TestLog)
 # while True:
