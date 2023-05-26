@@ -3,11 +3,13 @@
 # https://lastminuteengineers.com/ds3231-rtc-arduino-tutorial/
 
 # HiLetgo DS3231 + AT24C32N 
-
-
-# import from machiine I2C
-# i2c = I2C(sda=machine.Pin(4), scl=machine.Pin(5))
-# 
+ 
+# to set the time on the DS3231 use a tuple as shown here
+# d = DS3231(i2c)
+# d.set_time((YY, MM, DD, wday, hh, mm, ss, 0))
+# example from github
+# set time to 2019, November, 23, Monday, 19 h, 50 min, 0 sec
+# rtc.setDateTime(19, 11, 23, 1, 19, 50, 0)
 
 from machine import I2C, Pin, RTC
 from ds3231_gen import *

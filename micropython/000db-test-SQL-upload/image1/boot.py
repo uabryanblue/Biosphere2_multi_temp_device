@@ -12,7 +12,7 @@ import sd
 import esp
 
 esp.osdebug(None)
-
+ 
 print("booting")
 realtc.rtcinit()
 print("set time")

@@ -28,18 +28,20 @@ def takereading():
     # print(f"TEMP1: {temp_c(data)}")
     temp1 = temp_c(data)
 
-    sleep(0.1)
 
+    # sleep(0.1)
     cs2.off()
     spi.readinto(data)
+
+    # sleep(0.1)
     cs2.on()
     temp2 = temp_c(data)
 
     temp1_corrected = (-0.01053*temp1*temp1) +1.90714*temp1 - 15.35578 # sensor #1 5/19/2023
     
 
-    print(f"TEMP1: {temp1:5} TEMP1 Coorected: {temp1_corrected:5} TEMP2: {temp2:5}")
+    # print(f"TEMP1: {temp1:5} TEMP1 Coorected: {temp1_corrected:5} TEMP2: {temp2:5}")
 
-    return temp1_corrected
+    return temp1, temp1_corrected, temp2
 
         # sleep(1)
