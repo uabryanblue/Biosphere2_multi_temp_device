@@ -6,22 +6,22 @@ from machine import Pin, SPI
 import time
 
 
-def initSD():
-    print("mounting /logs")
+def initSD(mnt):
+    print(f"mounting {mnt}")
     sd = sdcard.SDCard(machine.SPI(1), machine.Pin(15))
     vfs = os.VfsFat(sd)
-    os.mount(vfs, "/logs")
-    # os.listdir('/logs/')
+    os.mount(vfs, mnt)
+    # os.listdir(mnt)
     time.sleep(0.2)
-    listFiles = os.listdir("/logs")
+    listFiles = os.listdir(mnt)
     if len(listFiles) > 0:
-        print(f"file(s) in /logs {listFiles}")
+        print(f"file(s) in {mnt} {listFiles}")
     else:
         print("no file!")
 
 
-def closeSD():
-    os.umount("/logs")
+def closeSD(mnt):
+    os.umount(mnt)
 
 
 # vfs = os.VfsFat(sd)

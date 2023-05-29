@@ -25,4 +25,4 @@ realtc.rtcinit()
 print("set time")
 
 # attach SD card module and mount the SD card, if one is present
-sd.initSD()
+sd.initSD(conf.LOG_MOUNT)
