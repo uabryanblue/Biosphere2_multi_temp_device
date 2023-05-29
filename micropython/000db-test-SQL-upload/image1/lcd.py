@@ -5,22 +5,23 @@ from time import sleep
 
 # display found at address:  0x3c
 
+
 def scanI2C():
     # sdaPIN=machine.Pin(4)  #for ESP32
     # sclPIN=machine.Pin(5)
 
-    # i2c=machine.I2C(sda=sdaPIN, scl=sclPIN, freq=10000)   
+    # i2c=machine.I2C(sda=sdaPIN, scl=sclPIN, freq=10000)
     i2c = machine.I2C(sda=machine.Pin(4), scl=machine.Pin(5))
     devices = i2c.scan()
     if len(devices) == 0:
         print("No i2c device !")
     else:
-        print('i2c devices found:',len(devices))
+        print("i2c devices found:", len(devices))
     for device in devices:
-        print("At address: ",hex(device))
+        print("At address: ", hex(device))
+
 
 def testLCD():
-    
     # I2C_ADDR = 0x3c
 
     totalRows = 32
@@ -36,8 +37,8 @@ def testLCD():
     # oled.show()
 
     oled.poweron()
-    oled.text('Hello', 0, 0)
-    oled.text('World', 0, 10)
+    oled.text("Hello", 0, 0)
+    oled.text("World", 0, 10)
     oled.show()
 
     print("oled done")
@@ -52,5 +53,5 @@ def testLCD():
     # oled.text('OLED Display', 0, 10)
     # oled.text('how2electronics', 0, 20)
     # oled.text('Makerfabs', 0, 30)
-            
+
     # oled.show()

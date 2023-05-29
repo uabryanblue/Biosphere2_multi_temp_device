@@ -39,7 +39,7 @@ UTC_OFFSET = -7 * 60 * 60  # -7 arizona time
 # this should be the base url up to, but not including, the "?" character
 # DB_URL = """http://www.theexternet.com/printing.php"""  # 200 okay test URL
 # DB_URL = """https://adwriter.com/privacy-policy.php""" # 301 permanent move URL
-DB_URL = """https://lazuline.us/mypage""" # 404 not found error
+DB_URL = """https://lazuline.us/mypage"""  # 404 not found error
 # DB_URL = """http://biosphere2.000webhostapp.com/dbwrite.php"""  # intitial test DB location
 
 # LOOGER

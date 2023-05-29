@@ -25,7 +25,7 @@
 #   val = 0
 #   for i in range(0,5):
 #     sleep(0.1)
-#     val += pot.read()    
+#     val += pot.read()
 #   return val/5
 
 # while True:

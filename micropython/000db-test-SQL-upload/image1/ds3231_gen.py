@@ -37,7 +37,7 @@ class Alarm:
         self.offs = 7 if self.alno == 1 else 0x0B  # Offset into address map
         self.mask = 0
 
-    def _reg(self, offs : int, buf = bytearray(1)) -> int:  # Read a register
+    def _reg(self, offs: int, buf=bytearray(1)) -> int:  # Read a register
         self._i2c.readfrom_mem_into(_ADDR, offs, buf)
         return buf[0]
 
@@ -107,7 +107,9 @@ class DS3231:
         if alarm is not None:  # Setting an alarm - mask holds MS 2 bits
             self.ds3231.writeto_mem(_ADDR, offs, gbyte(mday, mask))
         else:  # Setting time
-            self.ds3231.writeto_mem(_ADDR, offs, gbyte(wday + 1))  # 1 == Monday, 7 == Sunday
+            self.ds3231.writeto_mem(
+                _ADDR, offs, gbyte(wday + 1)
+            )  # 1 == Monday, 7 == Sunday
             offs += 1
             self.ds3231.writeto_mem(_ADDR, offs, gbyte(mday))  # Day of month
             offs += 1

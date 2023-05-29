@@ -4,22 +4,26 @@
 import machine, sdcard, os
 from machine import Pin, SPI
 import time
- 
+
+
 def initSD():
     print("mounting /logs")
     sd = sdcard.SDCard(machine.SPI(1), machine.Pin(15))
     vfs = os.VfsFat(sd)
-    os.mount(vfs, '/logs')
+    os.mount(vfs, "/logs")
     # os.listdir('/logs/')
     time.sleep(0.2)
-    listFiles = os.listdir('/logs')
+    listFiles = os.listdir("/logs")
     if len(listFiles) > 0:
         print(f"file(s) in /logs {listFiles}")
     else:
         print("no file!")
 
+
 def closeSD():
-    os.umount('/logs')
+    os.umount("/logs")
+
+
 # vfs = os.VfsFat(sd)
 # os.mount(vfs, “/fc”)
 
@@ -31,7 +35,7 @@ def closeSD():
 #     print(n, "bytes written")
 
 
-#code8-1 : list
+# code8-1 : list
 # import sdcard, os
 # from machine import Pin, SPI
 # กำหนดขา CS
@@ -52,7 +56,6 @@ def closeSD():
 # os.umount('/sd')
 # stop using SPI port
 # spi.deinit()
-
 
 
 # import machine, sdcard, os
@@ -105,4 +108,4 @@ def closeSD():
 #             result = f.read()
 #             print(len(result2), “bytes read”)
 #             print()
-#             print(result)            
+#             print(result)

@@ -1,5 +1,6 @@
 import machine
 from time import sleep
+
 # import logger
 import sd
 import thermocouple
@@ -24,11 +25,11 @@ for i in range(20):
 
     with open(fn, "a") as f:
         n = f.write(f"{i}\t{time.localtime()}\t{t1}\t{t1c}\t{t2}")
-        # print(f"{time.localtime()}\tt1: {t1}\t t1c: {t1c}\tt2: {t2}")
+        print(f"{time.localtime()}\tt1: {t1:6}\t t1c: {t1c:6}\tt2: {t2:6}")
         # f.write(f"{t1}")
         print(n, "bytes written")
-        f.write('\n')
-    
+        f.write("\n")
+
     sleep(1)
 
 print("dump contents")
@@ -40,7 +41,7 @@ print("end of log")
 
 # ########### !!! if you don't close it, it will get overwritten
 # when the next PYMAKR update is performed!!!!!!!!!!!
-sd.closeSD()
+# sd.closeSD()
 
 # logger.write_log("This is a test.", TestLog)
 # while True:
