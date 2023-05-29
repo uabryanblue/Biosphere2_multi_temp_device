@@ -11,31 +11,22 @@ print("START")
 
 print("good to go")
 
-# LogMount = "/logs/"
-# TestLog =" /logs/testlog.log"
 
-# logger.get_storage_stats('/logs')
-
-# t1, t1c, t2 = thermocouple.takereading()
-
-
-sleep(0.1)
-# fn = "/logs/one-line-log.txt"
-fn = conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
+# sleep(0.1)
+log = conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
 
 for i in range(20):
     t1, t1c, t2 = thermocouple.takereading()
 
-    with open(fn, "a") as f:
-        n = f.write(f"{i}\t{realtc.formattime(time.localtime())}\t{t1}\t{t1c}\t{t2}")
+    with open(log, "a") as f:
+        f.write(f"{i}\t{realtc.formattime(time.localtime())}\t{t1}\t{t1c}\t{t2}\n")
+        # f.write("\n")
         print(f"{realtc.formattime(time.localtime())}\tt1: {t1:6}\t t1c: {t1c:6}\tt2: {t2:6}")
-        f.write("\n")
 
     sleep(1)
 
 print("dump contents")
-# fn = "/logs/one-line-log.txt"
-with open(fn, "r") as f:
+with open(log, "r") as f:
     for line in f:
         print(line.rstrip())
 print("end of log")
