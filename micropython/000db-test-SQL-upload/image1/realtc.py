@@ -14,15 +14,20 @@ from machine import I2C, Pin, RTC
 import time
 from ds3231_gen import *
 
+
 def formattime(t):
     """produce a date/time format from tuple
-       only minute resolution supported"""
+    only minute resolution supported"""
+
     # YY-MM-DD hh:mm:ss
-    return "{}-{:0>2}-{:0>2} {:0>2}:{:0>2}:{:0>2}".format(t[0], t[1], t[2], t[3], t[4], t[5])
+    return "{}-{:0>2}-{:0>2} {:0>2}:{:0>2}:{:0>2}".format(
+        t[0], t[1], t[2], t[3], t[4], t[5]
+    )
 
 
 def rtcinit():
     """get the time from the RTC DS3231 board and set the local RTC"""
+
     rtc = RTC()
     i2c = I2C(sda=machine.Pin(4), scl=machine.Pin(5))
     d = DS3231(i2c)
@@ -30,6 +35,7 @@ def rtcinit():
     rtc.datetime((YY, MM, DD, wday, hh, mm, ss, 0))
     print(f"DS3231 time: {d.get_time()}")
     print(f"local time: {formattime(time.localtime())}")
+
 
 ###########################
 # TURN ON LATER FOR ntp WiFi SUPPORT
