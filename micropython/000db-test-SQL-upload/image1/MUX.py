@@ -1,3 +1,33 @@
+from machine import Pin
+# # the 4 digital outs to select 16 analog MUX values
+# currentlly trying with just 2 pins
+D0 = Pin(0, Pin.OUT)
+D1 = Pin(3, Pin.OUT)
+# D2 = Pin(4, Pin.OUT)
+
+# signal
+D3 = Pin(1, Pin.OUT)
+
+def signal0():
+    D0.off()
+    D1.off()
+    D3.on()
+
+def signal1():
+    D0.on()
+    D1.off()
+    D3.on()
+
+def signal_off():
+    D0.off()
+    D1.off()
+    D3.off()
+
+
+
+
+
+
 # THIS CODE IS A BACKUP OF SOME EXPLORATION
 # IT NEEDS REMOVED FOR THE FINAL VERSION
 
