@@ -16,11 +16,13 @@ print("good to go")
 # sleep(0.1)
 log = conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
 
-for i in range(20):
-    # t1, t1c, t2 = thermocouple.takereading()
-    readings = dict()
-    readings = thermocouple.ReadThermocouples(readings)
+# TODO this needs to be read from configuration
+readings = dict()
+readings[16] = 0.0
+readings[0] = 0.0
 
+for i in range(20):
+    readings = thermocouple.read_thermocouples(readings)
  
     with open(log, "a") as f:
         f.write(f"{i}\t{realtc.formattime(time.localtime())}")
