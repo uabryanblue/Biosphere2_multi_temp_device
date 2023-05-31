@@ -49,18 +49,18 @@ def read_thermocouple(cs_pin, spi):
 def read_thermocouples(readings):
     """setup spi connection, read all thermocouples, close spi connection"""
 
-    spi = machine.SPI(1, baudrate=5000000, polarity=0, phase=0)
+    tspi = machine.SPI(1, baudrate=5000000, polarity=0, phase=0)
 
     # print(readings)
 
     for key in readings.keys():
         cs_pin = key
-        readings[key] = read_thermocouple(cs_pin, spi)
+        readings[key] = read_thermocouple(cs_pin, tspi)
 
     # TODO need to place possible callibration call
     # callibration = []
 
     # TODO put in some error checking to ensure spi is released
-    spi.deinit()
+    tspi.deinit()
 
     return readings
