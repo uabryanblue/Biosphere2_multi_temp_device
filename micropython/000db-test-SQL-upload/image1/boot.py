@@ -9,11 +9,20 @@ import gc
 import time
 import esp
 import conf
-
+from machine import Pin
 import realtc
 import sd
+from time import sleep
 
 esp.osdebug(None)
+
+# print("setting pins")
+# D0 = Pin(0, Pin.OUT)
+# D1 = Pin(3, Pin.OUT)
+# D2 = Pin(4, Pin.OUT)
+# signal
+# D3 = Pin(1, Pin.OUT)
+# print("done with pins")
 
 # pushes first real line of output
 # to the line after the terminal garbage finishes
@@ -26,3 +35,4 @@ print("set time")
 
 # attach SD card module and mount the SD card, if one is present
 sd.initSD(conf.LOG_MOUNT)
+sleep(0.5)
