@@ -95,6 +95,7 @@ def read_thermocouple(cs_pin, spi):
     D8 = Pin(15, Pin.OUT)
     D8.off()
 
+    # brute force testing
     if cs_pin == 1:
         S0.off()
         S1.on()
