@@ -81,31 +81,64 @@ def read_thermocouple(cs_pin, spi):
     # cs.off()
 
     S0 = Pin(16, Pin.OUT)
-    S0.off()
+    S0.on()
     S1 = Pin(5, Pin.OUT)
-    S1.off()
+    S1.on()
     S2 = Pin(4, Pin.OUT)
-    S2.off()
+    S2.on()
     S3 = Pin(0, Pin.OUT)
-    S3.off()
-    cs = Pin(2, Pin.OUT)
-    cs.on() # signal low to read, default high
-  
+    S3.on()
+    S4 = Pin(2, Pin.OUT)
+    S4.on() # signal low to read, default high
+
+    # control the relay eventually
+    D8 = Pin(15, Pin.OUT)
+    D8.off()
+
     if cs_pin == 1:
-        S0.on()
-        S1.off()
-    else: #cs_pin == 1:
         S0.off()
         S1.on()
+        S2.on()
+        S3.on()
+        S4.on()
+        D8.off()
+    elif cs_pin == 2:
+        S0.on()
+        S1.off()
+        S2.on()
+        S3.on()
+        S4.on()
+        D8.on()
+    elif cs_pin == 3:
+        S0.on()
+        S1.on()
+        S2.off()
+        S3.on()
+        S4.on()
+        D8.off()
+    elif cs_pin == 4:
+        S0.on()
+        S1.on()
+        S2.on()
+        S3.off()
+        S4.on()
+        D8.on()
+    elif cs_pin == 5:
+        S0.on()
+        S1.on()
+        S2.on()
+        S3.on()
+        S4.off()
+        D8.off()
 
-    cs.off()
+    # cs.off()
     sleep(1)
-    print(f"CS:{cs.value()}  S0:{S0.value()}   S1:{S1.value()}")
+    # print(f"CS:{cs.value()}  S0:{S0.value()}   S1:{S1.value()}")
     spi.readinto(raw_data)
     sleep(1)
-    cs.on()
+    # cs.on()
     temp = temp_c(raw_data)
-    print(f"temp:{temp}")
+    print(f"thermocouple: {cs_pin}\ttemp:{temp}")
     sleep(1)
     return temp
 

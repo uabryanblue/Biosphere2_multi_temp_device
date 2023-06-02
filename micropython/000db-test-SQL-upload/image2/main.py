@@ -17,19 +17,23 @@ print("good to go")
 
 
 
-# TODO this needs to be read from configuration
-readings = dict()
-# readings[16] = 0.0
-# readings[0] = 0.0
-readings[1] = 0.0
-readings[2] = 0.0
 
 
 for i in range(10):
+
+    # TODO this needs to be read from configuration
+    readings = dict()
+    readings[1] = 0.0
+    readings[2] = 0.0
+    readings[3] = 0.0
+    readings[4] = 0.0
+    readings[5] = 0.0
+
     readings = thermocouple.read_thermocouples(readings)
+
   
-    # for key in readings.keys():
-    #     print(f"key: {key}, value: {readings[key]}")
+    for key in readings.keys():
+        print(f"key: {key}, value: {readings[key]}")
 
 
     # with open(log, "a") as f:
