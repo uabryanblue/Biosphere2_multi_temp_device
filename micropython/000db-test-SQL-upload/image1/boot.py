@@ -13,6 +13,7 @@ from machine import Pin
 import realtc
 import sd
 from time import sleep
+import espnowex
 
 esp.osdebug(None)
 
@@ -25,6 +26,12 @@ print("booting")
 # set the on board RTC to the time from the DS3231
 realtc.rtcinit()
 print("set time")
+
+# convert hex into readable mac address
+raw_mac = espnowex.get_mac()
+my_mac = ':'.join(['{:02x}'.format(b) for b in raw_mac])
+# print(f"My MAC:: {my_mac}")
+print(f"My MAC addres:: {my_mac} raw:: {espnowex.get_mac()}")
 
 # attach SD card module and mount the SD card, if one is present
 sd.initSD(conf.LOG_MOUNT)
