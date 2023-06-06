@@ -6,6 +6,7 @@ import conf
 import realtc
 import sd
 import thermocouple
+import espnowex
 
 print("START")
 
@@ -18,8 +19,9 @@ print("good to go")
 
 
 
+con = espnowex.init_rx()
 
-for i in range(10):
+for i in range(100):
 
     # TODO this needs to be read from configuration
     readings = dict()
@@ -34,8 +36,9 @@ for i in range(10):
   
     for key in readings.keys():
         print(f"key: {key}, value: {readings[key]}")
-
-
+    out = ','.join(map(str, readings.values()))
+    print(out)
+    espnowex.demo_send(con, out)
     # with open(log, "a") as f:
     #     f.write(f"{i}\t{realtc.formattime(time.localtime())}")
     #     for key in readings.keys():
