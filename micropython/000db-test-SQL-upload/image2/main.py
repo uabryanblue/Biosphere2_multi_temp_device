@@ -53,10 +53,11 @@ print(f" the new time is: {realtc.formattime(time.localtime())}")
 #     print(f"received a respons of: {msg}")
     
 
-for i in range(100):
+readings = dict()
+while True:
 
     # TODO this needs to be read from configuration
-    readings = dict()
+
     readings[1] = 0.0
     readings[2] = 0.0
     readings[3] = 0.0
@@ -73,20 +74,9 @@ for i in range(100):
     out = date_time + ',' + temperature_data
     print(out)
     espnowex.esp_tx(esp_con, out)
-    # with open(log, "a") as f:
-    #     f.write(f"{i}\t{realtc.formattime(time.localtime())}")
-    #     for key in readings.keys():
-    #         print(f"key: {key}, value: {readings[key]}")
-    #         f.write(f"\t{readings[key]}")
-    #     f.write("\n")
 
     sleep(1)
 
-# print("dump contents")
-# with open(log, "r") as f:
-#     for line in f:
-#         print(line.rstrip())
-# print("end of log")
 
 
 

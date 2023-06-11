@@ -24,7 +24,7 @@ print(f"My MAC addres:: {MY_MAC} raw MAC:: {RAW_MAC}")
 
 logname = '/' + conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
 
-for i in range(3):
+while True:
     print("going to listen for a message")
     host, msg = espnowex.esp_rx(esp_con)
     str_host = ':'.join(['{:02x}'.format(b) for b in host])
