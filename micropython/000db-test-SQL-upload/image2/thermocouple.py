@@ -133,14 +133,14 @@ def read_thermocouple(cs_pin, spi):
         D8.off()
 
     # cs.off()
-    sleep(1)
+    sleep(0.250) # 250 ms
     # print(f"CS:{cs.value()}  S0:{S0.value()}   S1:{S1.value()}")
     spi.readinto(raw_data)
-    sleep(1)
+    # sleep(1)
     # cs.on()
     temp = temp_c(raw_data)
     print(f"thermocouple: {cs_pin}\ttemp:{temp}")
-    sleep(1)
+    # sleep(1)
     return temp
 
 

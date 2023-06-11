@@ -4,22 +4,22 @@ from time import sleep
 # import logger
 import conf
 import realtc
-import sd
+# import sd
 import thermocouple
 import espnowex
 
 print("START")
 
-print("good to go")
+# con = espnowex.init_esp_connection()
+sta, ap = espnowex.wifi_reset()
+esp_con = espnowex.init_esp_connection(sta)
 
 
-# sleep(0.1)
-# log = conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
-
-
-
-
-con = espnowex.init_rx()
+# convert hex into readable mac address
+RAW_MAC = espnowex.get_mac(sta)
+MY_MAC = ':'.join(['{:02x}'.format(b) for b in RAW_MAC])
+# print(f"My MAC:: {MY_MAC}")
+print(f"My MAC addres:: {MY_MAC} raw MAC:: {RAW_MAC}")
 
 for i in range(100):
 
@@ -34,11 +34,11 @@ for i in range(100):
     readings = thermocouple.read_thermocouples(readings)
 
   
-    for key in readings.keys():
-        print(f"key: {key}, value: {readings[key]}")
+    # for key in readings.keys():
+    #     print(f"key: {key}, value: {readings[key]}")
     out = ','.join(map(str, readings.values()))
     print(out)
-    espnowex.demo_send(con, out)
+    espnowex.esp_tx(esp_con, out)
     # with open(log, "a") as f:
     #     f.write(f"{i}\t{realtc.formattime(time.localtime())}")
     #     for key in readings.keys():

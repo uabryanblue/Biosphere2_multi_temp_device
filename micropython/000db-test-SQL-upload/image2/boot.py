@@ -15,7 +15,8 @@ import sd
 from time import sleep
 import espnowex
 
-# esp.osdebug(None)
+# decrease space used by esp system logging
+esp.osdebug(None)
 
 
 # pushes first real line of output
@@ -23,19 +24,11 @@ import espnowex
 # "garbage" is due to mismatch in terminal speed on boot, not a bug
 print("booting")
 
-# convert hex into readable mac address
-raw_mac = espnowex.get_mac()
-my_mac = ':'.join(['{:02x}'.format(b) for b in raw_mac])
-# print(f"My MAC:: {my_mac}")
-print(f"My MAC addres:: {my_mac} raw:: {espnowex.get_mac()}")
+# # convert hex into readable mac address
+# RAW_MAC = espnowex.get_mac()
+# MY_MAC = ':'.join(['{:02x}'.format(b) for b in RAW_MAC])
+# # print(f"My MAC:: {MY_MAC}")
+# print(f"My MAC addres:: {MY_MAC} raw MAC:: {RAW_MAC}")
 
 # print("send a demo packet")
 # espnowex.demo_send()
-
-# set the on board RTC to the time from the DS3231
-# realtc.rtcinit()
-# print("set time")
-
-# attach SD card module and mount the SD card, if one is present
-# sd.initSD(conf.LOG_MOUNT)
-# sleep(0.5)
