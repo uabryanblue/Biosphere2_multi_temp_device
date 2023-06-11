@@ -13,6 +13,7 @@ def initSD(mnt):
     os.mount(vfs, mnt)
     # os.listdir(mnt)
     # time.sleep(0.2)
+    list_root = os.listdir()
     listFiles = os.listdir(mnt)
     if len(listFiles) > 0:
         print(f"file(s) in {mnt} {listFiles}")

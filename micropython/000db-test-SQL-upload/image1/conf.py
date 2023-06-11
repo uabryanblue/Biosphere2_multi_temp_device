@@ -43,5 +43,5 @@ DB_URL = """https://lazuline.us/mypage"""  # 404 not found error
 # DB_URL = """http://biosphere2.000webhostapp.com/dbwrite.php"""  # intitial test DB location
 
 # LOOGER
-LOG_MOUNT = "/log"
+LOG_MOUNT = "log"
 LOG_FILENAME = "logger.dat"

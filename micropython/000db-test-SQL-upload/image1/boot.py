@@ -6,14 +6,14 @@ STARTED: 2023
 """
 
 import gc
-import time
+# import time
 import esp
 import conf
-from machine import Pin
+# from machine import Pin
 import realtc
 import sd
 from time import sleep
-import espnowex
+# import espnowex
 
 esp.osdebug(None)
 
@@ -27,12 +27,7 @@ print("booting")
 realtc.rtcinit()
 print("set time")
 
-# convert hex into readable mac address
-raw_mac = espnowex.get_mac()
-my_mac = ':'.join(['{:02x}'.format(b) for b in raw_mac])
-# print(f"My MAC:: {my_mac}")
-print(f"My MAC addres:: {my_mac} raw:: {espnowex.get_mac()}")
-
 # attach SD card module and mount the SD card, if one is present
-sd.initSD(conf.LOG_MOUNT)
+# TODO error trapping and what to do if there isn't one to use?
+sd.initSD('/' + conf.LOG_MOUNT)
 sleep(0.5)
