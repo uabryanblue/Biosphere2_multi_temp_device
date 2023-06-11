@@ -26,7 +26,8 @@ def init_esp_connection(sta):
     # MAC address of peer's wifi interface
     # example: b'\x5c\xcf\x7f\xf0\x06\xda'
     # TODO peers should be in the conf file
-    peer = b'\x8c\xaa\xb5M\x7f\x18' # my esp8266 #1
+    # peer = b'\x8c\xaa\xb5M\x7f\x18' # my esp8266 #1
+    peer = b'\xc4[\xbe\xe4\xfdq'
     e.add_peer(peer) # register the peer for espnow communication
 
     return e
@@ -50,7 +51,7 @@ def esp_tx(e, msg):
     # # MAC address of peer1's wifi interface exmaple:
     # # peer1 = b'\xe8\x68\xe7\x4e\xbb\x19'
     # the receiver MAC address
-    peer = b'\x8c\xaa\xb5M\x7f\x18'  # my #2 esp8266
+    peer = b'\xc4[\xbe\xe4\xfdq'  
 
     print("Starting...")            # Send to all peers
     try:

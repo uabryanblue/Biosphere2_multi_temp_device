@@ -21,6 +21,38 @@ MY_MAC = ':'.join(['{:02x}'.format(b) for b in RAW_MAC])
 # print(f"My MAC:: {MY_MAC}")
 print(f"My MAC addres:: {MY_MAC} raw MAC:: {RAW_MAC}")
 
+# set the time from the logger
+retries = 0
+while not espnowex.esp_tx(esp_con, 'get_time'):
+    retries += 1
+    print(f"unable to get time ({retries}), sleeping")
+    sleep(3)
+
+print("wait for time response")
+host, msg = espnowex.esp_rx(esp_con)
+str_host = ':'.join(['{:02x}'.format(b) for b in host])
+# assumption data is utf-8, if not, it may fail
+str_msg = msg.decode('utf-8')
+print("------------------------")
+print(f"received a respons from {host} {str_host} of: {msg}") 
+et = eval(msg)
+print("--------------------")
+print(f"et: {et}")
+print("--------------------")
+
+rtc = machine.RTC()
+rtc.datetime(et)
+print(f" the new time is: {realtc.formattime(time.localtime())}")  
+
+# if retries == max_retries:
+#     print("failed to set time!!!")
+# else:
+#     # get and set the time
+#     print("get and set the date/time")
+#     host, msg = espnowex.esp_rx(esp_con)
+#     print(f"received a respons of: {msg}")
+    
+
 for i in range(100):
 
     # TODO this needs to be read from configuration
@@ -36,7 +68,9 @@ for i in range(100):
   
     # for key in readings.keys():
     #     print(f"key: {key}, value: {readings[key]}")
-    out = ','.join(map(str, readings.values()))
+    temperature_data = ','.join(map(str, readings.values()))
+    date_time = realtc.formattime(time.localtime())
+    out = date_time + ',' + temperature_data
     print(out)
     espnowex.esp_tx(esp_con, out)
     # with open(log, "a") as f:

@@ -1,5 +1,5 @@
 import machine
-from time import sleep
+import time
 
 import logger
 import conf
@@ -11,6 +11,7 @@ import lcd
 import espnowex
 
 print("START")
+rtc = machine.RTC()
 
 sta, ap = espnowex.wifi_reset()
 esp_con = espnowex.init_esp_connection(sta)
@@ -24,19 +25,25 @@ print(f"My MAC addres:: {MY_MAC} raw MAC:: {RAW_MAC}")
 logname = '/' + conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
 
 for i in range(3):
-    print("going to listen for a response")
+    print("going to listen for a message")
     host, msg = espnowex.esp_rx(esp_con)
+    str_host = ':'.join(['{:02x}'.format(b) for b in host])
+    # assumption data is utf-8, if not, it may fail
+    str_msg = msg.decode('utf-8')
+
     if msg == b'get_time':
-        print(f"{host} requested the time")
+        print(f"{host}, {str_host} requested the time")
+        time.sleep(0.1) # let other side get ready
+        # receiver blocked until time is received
+        espnowex.esp_tx(esp_con, str(rtc.datetime()))
+        print("time sent")
     else:
-        # assumption data is utf-8, if not, it may fail
-        str_host = host.decode('utf-8')
-        str_msg = msg.decode('utf-8')
-        logger.write_log(logname, str_host + str_msg)
+        # str_host = host.decode('utf-8')
+        logger.write_log(logname, str_host + ',' + str_msg)
     
 
 
-    sleep(3)
+    # time.sleep(3)
 
 print("dump log contents")
 logger.cat_log(logname)

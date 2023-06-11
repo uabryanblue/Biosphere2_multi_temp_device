@@ -50,7 +50,8 @@ def esp_tx(e, msg):
     # # MAC address of peer1's wifi interface exmaple:
     # # peer1 = b'\xe8\x68\xe7\x4e\xbb\x19'
     # the receiver MAC address
-    peer = b'\x8c\xaa\xb5M\x7f\x18'  # my #2 esp8266
+    # peer = b'\x8c\xaa\xb5M\x7f\x18'  # my #2 esp8266
+    peer = b'\xec\xfa\xbc\xcb\xab\xce' 
 
     print("Starting...")            # Send to all peers
     try:
@@ -67,33 +68,23 @@ def esp_tx(e, msg):
             print(f"ERROR: {err}")
 
     print("done exp_tx")
+    return res
 
 
-def demo_rx(e):
+def esp_rx(esp_con):
+    """init of esp connection needs performed first
+    peers need to be added to the espnow connection"""
 
-    # # A WLAN interface must be active to send()/recv()
-    # sta = network.WLAN(network.STA_IF)
-    # sta.active(True)
-    # sta.disconnect()                # Disconnect from last connected WiFi SSID
-
-    # e = espnow.ESPNow()                  # Enable ESP-NOW
-    # e.active(True)
-
-    # MAC address of peer's wifi interface
-    # example: b'\x5c\xcf\x7f\xf0\x06\xda'
-    # peer = b'\xec\xfa\xbc\xcb\xab\xce' # my esp8266 #1
-    # e.add_peer(peer)                   # Sender's MAC registration
-
-    while True:
-        host, msg = e.recv()
-        if msg:                          # wait for message
-            if msg == b'walk':           # decode message and translate
-                print("kwkF")       
-            elif msg == b'back':
-                print('kbk')
-            elif msg == b'stop':
-                print('d')
-
-# if __name__ == "__main__":
-#     espnow_rx()
+    # wait for a message to process
+    # while True:
+    host, msg = esp_con.recv()
+    # TODO change this to trap for errors, no need to check the msg
+    if msg:
+        if msg == b'get_time':
+            # send time to sender
+            print("host: {host} requested time")
+        else:
+            print(f"received from: {host}, message: {msg}")
     
+    return host, msg
+                
