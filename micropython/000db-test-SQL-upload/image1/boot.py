@@ -29,5 +29,9 @@ print("set time")
 
 # attach SD card module and mount the SD card, if one is present
 # TODO error trapping and what to do if there isn't one to use?
-sd.initSD('/' + conf.LOG_MOUNT)
+mnt = '/' + conf.LOG_MOUNT
+print(f"unmount: {mnt}")
+sd.closeSD(mnt)
+print(f"mount: {mnt}")
+sd.initSD(mnt)
 sleep(0.5)
