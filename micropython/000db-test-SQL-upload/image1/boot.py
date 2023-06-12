@@ -12,8 +12,10 @@ import conf
 # from machine import Pin
 import realtc
 import sd
+import sys
 from time import sleep
 # import espnowex
+import uerrno  # error trapping and code values
 
 esp.osdebug(None)
 
@@ -33,5 +35,10 @@ mnt = '/' + conf.LOG_MOUNT
 print(f"unmount: {mnt}")
 sd.closeSD(mnt)
 print(f"mount: {mnt}")
-sd.initSD(mnt)
+try:
+    sd.initSD(mnt)
+except OSError as e:
+    print(f"OSError: Connection closed {e}")
+    sys.exit(0)
+
 sleep(0.5)

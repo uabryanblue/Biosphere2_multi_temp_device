@@ -91,10 +91,6 @@ def read_thermocouple(cs_pin, spi):
     S4 = Pin(2, Pin.OUT)
     S4.on() # signal low to read, default high
 
-    # control the relay eventually
-    D8 = Pin(15, Pin.OUT)
-    D8.off()
-
     # brute force testing
     if cs_pin == 1:
         S0.off()
@@ -102,35 +98,30 @@ def read_thermocouple(cs_pin, spi):
         S2.on()
         S3.on()
         S4.on()
-        D8.off()
     elif cs_pin == 2:
         S0.on()
         S1.off()
         S2.on()
         S3.on()
         S4.on()
-        D8.on()
     elif cs_pin == 3:
         S0.on()
         S1.on()
         S2.off()
         S3.on()
         S4.on()
-        D8.off()
     elif cs_pin == 4:
         S0.on()
         S1.on()
         S2.on()
         S3.off()
         S4.on()
-        D8.on()
     elif cs_pin == 5:
         S0.on()
         S1.on()
         S2.on()
         S3.on()
         S4.off()
-        D8.off()
 
     # cs.off()
     sleep(0.250) # 250 ms

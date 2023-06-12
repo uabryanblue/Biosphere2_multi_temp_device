@@ -3,7 +3,7 @@ from time import sleep
 
 # import logger
 import conf
-import realtc
+# import realtc
 # import sd
 import thermocouple
 import espnowex
@@ -52,9 +52,16 @@ print(f" the new time is: {realtc.formattime(time.localtime())}")
 #     host, msg = espnowex.esp_rx(esp_con)
 #     print(f"received a respons of: {msg}")
     
+# setup pins for relays
+# D7 = machine.Pin(13, machine.Pin.OUT)
+# D7.on()
+# sleep(2)
+D8 = machine.Pin(15, machine.Pin.OUT)
+D8.off()
 
 readings = dict()
 while True:
+    # print(f"D7:{D7.value()} D8:{D8.value()}")
 
     # TODO this needs to be read from configuration
 
@@ -74,6 +81,16 @@ while True:
     out = date_time + ',' + temperature_data
     print(out)
     espnowex.esp_tx(esp_con, out)
+
+    # TURN HEATER ON OR OFF
+    diff = readings[2] - readings[5]
+    print(f"temperature difference between heated and control leaf: {diff}")
+    if diff <= 4.75:
+        print("diff <= 4.5, D8 is on")
+        D8.on()
+    elif diff > 4.75:
+        print("diff >= 4.75 D8 is off")
+        D8.off()
 
     sleep(1)
 
