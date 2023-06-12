@@ -4,6 +4,8 @@
 import machine, sdcard, os
 from machine import Pin, SPI
 import time
+import uerrno  # error trapping and code values
+
 
 
 def initSD(mnt):
@@ -22,7 +24,13 @@ def initSD(mnt):
 
 
 def closeSD(mnt):
-    os.umount(mnt)
+    try:
+        os.umount(mnt)
+    except OSError as e:
+        if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it
+            print("ETIMEDOUT found")  # timeout is okay, ignore it
+        else:  # general case, continue processing, prevent hanging
+            print(f"OSError: Connection closed {e}")
 
 
 # vfs = os.VfsFat(sd)
