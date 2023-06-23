@@ -30,18 +30,20 @@ logname = '/' + conf.LOG_MOUNT + "/" + conf.LOG_FILENAME
 
 while True:
     print("Data Logger: listen for a message")
+    D0.on() # reset LED off as a visual aid
     host, msg = espnowex.esp_rx(esp_con)
     str_host = ':'.join(['{:02x}'.format(b) for b in host])
+    D0.off() # turn on indicate a message was received
+
     # assumption data is utf-8, if not, it may fail
     str_msg = msg.decode('utf-8')
-    D0.off() # turn LED on as a visual aid
 
     if msg == b'get_time':
         print(f"Data Logger: {host}, {str_host} requested the time")
         time.sleep(0.1) # let other side get ready
         # receiver blocked until time is received
         espnowex.esp_tx(esp_con, str(rtc.datetime()))
-        D0.on()
+        D0.on() # turn led off, finished rquest
         print("Data Logger: time sent")
     else:
         # str_host = host.decode('utf-8')
@@ -51,16 +53,15 @@ while True:
             if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it
                 print("ETIMEDOUT found")  # timeout is okay, ignore it
             else:  # general case, continue processing, prevent hanging
-                print(f"OSError: Connection closed {e}")
-                
-    D0.on() # turn LED off as a visual aid
+                print(f"-------------- WRITE LOG ERROR: {e}")
+                D0.off() # turn LED off as a visual aid for error
         
 
 
-    # time.sleep(3)
+# time.sleep(3)
 
-print("dump log contents")
-logger.cat_log(logname)
+# print("dump log contents")
+# logger.cat_log(logname)
 
 
 
