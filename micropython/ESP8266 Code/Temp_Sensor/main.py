@@ -82,15 +82,17 @@ while True:
     print(out)
     espnowex.esp_tx(esp_con, out)
 
+    D8.on() # TESTING ONLY!!!!!!!!
     # TURN HEATER ON OR OFF
     diff = readings[2] - readings[5]
     print(f"temperature difference between heated and control leaf: {diff}")
     if diff <= 4.75:
         print("diff <= 4.5, D8 is on")
         D8.on()
-    elif diff > 4.75:
+    elif diff > 4.75 or diff == 'nan':
         print("diff >= 4.75 D8 is off")
         D8.off()
+        time.sleep(1.5)
 
     time.sleep(1)
 
