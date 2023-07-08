@@ -3,6 +3,7 @@ import time
 
 # import logger
 import conf
+from math import isnan
 import realtc
 # import sd
 import thermocouple
@@ -56,7 +57,7 @@ rtc = machine.RTC()
 rtc.datetime(et)
 print(f"Temp Sensor: the new time is: {realtc.formattime(time.localtime())}")  
 
-
+sequence = 1 # record number from the last time the system restarted
 while True:
     readings = thermocouple.initReadings(conf.readings)
     readings = thermocouple.read_thermocouples(readings)
@@ -64,19 +65,43 @@ while True:
   
     temperature_data = ','.join([str(value[2]) for value in readings.values()])
     date_time = realtc.formattime(time.localtime())
-    out = date_time + ',' + temperature_data
+    out = str(sequence) + ',' + date_time + ',' + temperature_data
     print(out)
     espnowex.esp_tx(esp_con, out)
 
-    diff = readings['HEATER'][2] - readings['CONTROL'][2]
-    print(f"CHECK TEMP DIFFERENCE - cont:{readings['CONTROL'][2]}, heat:{readings['HEATER'][2]}, DIFFERENCE: {diff}")
-    if diff <= 4.75:
-        print("diff <= 4.5, D8 is on")
+    # difference between treatment and control leaf handling
+    # also check for heater going out of randge
+    # and if temperature above maximum value for heating due to other reasons.
+    diff = readings['TREATMENT'][2] - readings['CONTROL'][2]
+    print(f"CHECK TEMP DIFFERENCE - cont:{readings['CONTROL'][2]}, heat:{readings['TREATMENT'][2]}, DIFFERENCE: {diff}")
+    print(f"{str(diff)}, {diff}, {type(diff)}, {isnan(diff)}")
+    if isnan(diff) is True:
+        print("nan is true")
         D8.on()
-    elif diff > 4.75 or diff == 'nan':
-        print("diff >= 4.75 D8 is off")
+        time.sleep(1)
+        D8.off()
+        time.sleep(1)
+        D8.on()
+        time.sleep(1)
+        D8.off()
+    elif readings['HEATER'][2] >= conf.TMAX_HEATER: # error state, shut down heater
+        D8.off() # TODO record an ERROR in the system log
+    elif readings['TREATMENT'][2] >= conf.TMAX: # warning leaf temp exceeded threshold, turn off heater
+        D8.off() # TODO record a WARNING in the system log
+    # TODO there needs to be a deadband to prevent oscillation
+    elif diff < (conf.TDIFF + 0.25): # lower than required temp above control leaf
+        D8.on() 
+    elif diff >= (conf.TDIFF - 0.25): # higher than required temp control leaf
         D8.off()
 
+
+    # if diff <= 4.75:
+    #     print("diff <= 4.5, D8 is on")
+    #     D8.on()
+    # elif diff > 4.75 or diff == 'nan':
+    #     print("diff >= 4.75 D8 is off")
+    #     D8.off()
+    sequence += 1
     time.sleep(2)
 
 
