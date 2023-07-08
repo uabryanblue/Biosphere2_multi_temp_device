@@ -72,23 +72,24 @@ TMAX_HEATER = 60 # 140 F
 # first list element: D0 - D4 correspond to the physical pins on the ESP8266
 # second list element: GPIO number corresponding to D0 - D4
 # third list element: temperature value
-# sensor readings are recorded in a dictionary
+# sensor readings are recorded in a dictionary containing lists
 readings = dict()
 # requres 1 of each value:
 # HEATER - heating device temperature
 # CONTROL - control leaf temperature
 # TREATMENT - leaf that is being heated
 # D3, D4 - 2 extra sensors
-# Define each dictionary element as a PIN, TempValue pair
-# EXAMPLE:  readings['HEATER'] = [0, 0.0]
-# key = HEATER, PIN = D0, initial temp value = 0.0
-readings['HEATER'] = [1, 0.0]
-readings['CONTROL'] = [2, 0.0]
-readings['TREATMENT'] = [3, 0.0]
+# Define each dictionary element as a PIN, GPIO, TempValue
+# EXAMPLE:  readings['HEATER'] = [1, 16, 0.0]
+# key = HEATER, PIN = D0, GPIO 16, initial temp value = 0.0
+readings['HEATER'] = [1, 16, 0.0]
+readings['CONTROL'] = [2, 5, 0.0]
+readings['TREATMENT'] = [3, 4, 0.0]
 # two extra sensor locations, default D3 and D4
-readings['D3'] = [4, 0.0]
-readings['D4'] = [5, 0.0]
+readings['D3'] = [4, 0, 0.0]
+readings['D4'] = [5, 2, 0.0]
+
 # Output Order
 # this controls the 5 temperature sensor readings' output order
 # output will be a CSV with values corresponding to this order
-readOrder = ['TREATMENT', 'CONTROL', 'HEATER', 'D3', 'D4']
+readingsOrder = ['TREATMENT', 'CONTROL', 'HEATER', 'D3', 'D4']

@@ -73,15 +73,14 @@ def callibrated_reading(temperature):
 
 def initReadings(readings):
     for key in readings.keys():
-        readings[key][1] = 0.0 # 2nd position is temp value
+        readings[key][2] = 0.0 # 3rd position is temp value
     return readings
 
 def catReadings(readings):
     strReadings = ''
     for key in readings.keys():
-        strReadings =+ readings[key][1] # 2nd position is temp value
-    return strReadings
-
+        strReadings =+ readings[key][2] # 2nd position is temp value
+    return strReading3rd
 
 def read_thermocouple(cs_pin, spi):
     """reads one thermocouple from given CS pin and spi object"""
@@ -143,7 +142,7 @@ def read_thermocouple(cs_pin, spi):
     # sleep(1)
     # cs.on()
     temp = temp_c(raw_data)
-    print(f"thermocouple: {cs_pin}\ttemp:{temp}")
+    # print(f"thermocouple: {cs_pin}\ttemp:{temp}")
     # sleep(1)
     return temp
 
@@ -157,9 +156,9 @@ def read_thermocouples(readings):
 
     for key in readings.keys():
         cs_pin = readings[key][0] # first position is pin number
-        readings[key][1] = read_thermocouple(cs_pin, tspi) # 2nd position is temp value
-        print(f'{key}: temp: {reading[key][0]}')
-        sleep(1)
+        readings[key][2] = read_thermocouple(cs_pin, tspi) # 3rd position is temp value
+        print(f'{key}: temp: {readings[key][2]}')
+        # sleep(1)
 
     # TODO need to place possible callibration call
     # callibration = []

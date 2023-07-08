@@ -23,16 +23,24 @@ print(f"My MAC addres:: {MY_MAC} raw MAC:: {RAW_MAC}")
 
 # set the time from the logger
 retries = 0
-while not espnowex.esp_tx(esp_con, 'get_time'):
+host = ''
+espnowex.esp_tx(esp_con, 'get_time')
+host, msg = espnowex.esp_rx(esp_con)
+
+while not msg:
     retries += 1
-    print(f"Temp Sensor: unable to get time ({retries}), sleeping")
+    espnowex.esp_tx(esp_con, 'get_time')
+    # print("Time Sensor: wait for time response")
+    host, msg = espnowex.esp_rx(esp_con)
+    print(f'found host: {host}')        
+    print(f"Get Time: unable to get time ({retries})")
     time.sleep(3)
 
-print("Time Sensor: wait for time response")
-host, msg = espnowex.esp_rx(esp_con)
+print(host)
 str_host = ':'.join(['{:02x}'.format(b) for b in host])
 # assumption data is utf-8, if not, it may fail
 str_msg = msg.decode('utf-8')
+
 print("------------------------")
 print(f"received a respons from {host} {str_host} of: {msg}") 
 et = eval(msg)
@@ -77,29 +85,30 @@ while True:
   
     # for key in readings.keys():
     #     print(f"key: {key}, value: {readings[key]}")
-    temperature_data = ','.join([ str(value[1]) for value in readings.values() ])
+    temperature_data = ','.join([str(value[2]) for value in readings.values()])
     # temperature_data = ','.join(map(str, readings.values()[1]))
     date_time = realtc.formattime(time.localtime())
     out = date_time + ',' + temperature_data
     print(out)
     espnowex.esp_tx(esp_con, out)
 
-    D8.on() # TESTING ONLY!!!!!!!!
+    # D8.on() # TESTING ONLY!!!!!!!!
     # TURN HEATER ON OR OFF
     # logic shouuld be on/off based on external reference
     # with check for any temperature above a maxium threshold for safety reasons
 
-    diff = readings['CONTROL'][1] - readings['HEATER'][1]
-    print(f"temperature difference between heated and control leaf: {diff}")
+    diff = readings['HEATER'][2] - readings['CONTROL'][2]
+    print(f"CHECK TEMP DIFFERENCE - cont:{readings['CONTROL'][2]}, heat:{readings['HEATER'][2]}, DIFFERENCE: {diff}")
+    # print(f"temperature difference between heated and control leaf: {diff}")
     if diff <= 4.75:
         print("diff <= 4.5, D8 is on")
         D8.on()
     elif diff > 4.75 or diff == 'nan':
         print("diff >= 4.75 D8 is off")
         D8.off()
-        time.sleep(1.5)
+        # time.sleep(1.5)
 
-    time.sleep(1)
+    time.sleep(2)
 
 
 
