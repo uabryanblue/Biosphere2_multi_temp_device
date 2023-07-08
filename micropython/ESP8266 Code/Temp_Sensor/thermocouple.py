@@ -31,46 +31,6 @@ def callibrated_reading(temperature):
     )  # sensor #1 5/19/2023
     return temp_corrected
 
-
-# def read_thermocouple(cs_pin, spi):
-#     """reads one thermocouple from given CS pin and spi object"""
-#     raw_data = bytearray(4)
-#     # cs = machine.Pin(cs_pin, machine.Pin.OUT)
-#     # chip select needs to be low to take a reading, init high
-#     # cs.on()
-
-#     # read sensor and convert to degrees C
-#     # cs.off()
-
-#     S0 = Pin(16, Pin.OUT)
-#     S0.off()
-#     S1 = Pin(5, Pin.OUT)
-#     S1.off()
-#     S2 = Pin(4, Pin.OUT)
-#     S2.off()
-#     S3 = Pin(0, Pin.OUT)
-#     S3.off()
-#     cs = Pin(2, Pin.OUT)
-#     cs.on() # signal low to read, default high
-  
-#     if cs_pin == 1:
-#         S0.on()
-#         S1.off()
-#     else: #cs_pin == 1:
-#         S0.off()
-#         S1.on()
-
-#     cs.off()
-#     sleep(1)
-#     print(f"CS:{cs.value()}  S0:{S0.value()}   S1:{S1.value()}")
-#     spi.readinto(raw_data)
-#     sleep(1)
-#     cs.on()
-#     temp = temp_c(raw_data)
-#     print(f"temp:{temp}")
-#     sleep(1)
-#     return temp
-
 def initReadings(readings):
     for key in readings.keys():
         readings[key][2] = 0.0 # 3rd position is temp value
@@ -85,12 +45,6 @@ def catReadings(readings):
 def read_thermocouple(cs_pin, spi):
     """reads one thermocouple from given CS pin and spi object"""
     raw_data = bytearray(4)
-    # cs = machine.Pin(cs_pin, machine.Pin.OUT)
-    # chip select needs to be low to take a reading, init high
-    # cs.on()
-
-    # read sensor and convert to degrees C
-    # cs.off()
 
     S0 = Pin(16, Pin.OUT)
     S0.on()
@@ -135,15 +89,10 @@ def read_thermocouple(cs_pin, spi):
         S3.on()
         S4.off()
 
-    # cs.off()
     sleep(0.250) # 250 ms
-    # print(f"CS:{cs.value()}  S0:{S0.value()}   S1:{S1.value()}")
     spi.readinto(raw_data)
-    # sleep(1)
-    # cs.on()
     temp = temp_c(raw_data)
-    # print(f"thermocouple: {cs_pin}\ttemp:{temp}")
-    # sleep(1)
+
     return temp
 
 
