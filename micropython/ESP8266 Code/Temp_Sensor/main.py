@@ -56,27 +56,29 @@ print(f"Temp Sensor: the new time is: {realtc.formattime(time.localtime())}")
 # D7 = machine.Pin(13, machine.Pin.OUT)
 # D7.on()
 # sleep(2)
+# relay control, start in the off state
 D8 = machine.Pin(15, machine.Pin.OUT)
 D8.off()
 
-readings = dict()
+# readings = dict() # in conf.py now
 while True:
     # print(f"D7:{D7.value()} D8:{D8.value()}")
 
     # TODO this needs to be read from configuration
-
-    readings[1] = 0.0
-    readings[2] = 0.0
-    readings[3] = 0.0
-    readings[4] = 0.0
-    readings[5] = 0.0
+    readings = thermocouple.initReadings(conf.readings)
+    # readings[1] = 0.0
+    # readings[2] = 0.0
+    # readings[3] = 0.0
+    # readings[4] = 0.0
+    # readings[5] = 0.0
 
     readings = thermocouple.read_thermocouples(readings)
 
   
     # for key in readings.keys():
     #     print(f"key: {key}, value: {readings[key]}")
-    temperature_data = ','.join(map(str, readings.values()))
+    temperature_data = ','.join([ str(value[1]) for value in readings.values() ])
+    # temperature_data = ','.join(map(str, readings.values()[1]))
     date_time = realtc.formattime(time.localtime())
     out = date_time + ',' + temperature_data
     print(out)
@@ -84,7 +86,10 @@ while True:
 
     D8.on() # TESTING ONLY!!!!!!!!
     # TURN HEATER ON OR OFF
-    diff = readings[2] - readings[5]
+    # logic shouuld be on/off based on external reference
+    # with check for any temperature above a maxium threshold for safety reasons
+
+    diff = readings['CONTROL'][1] - readings['HEATER'][1]
     print(f"temperature difference between heated and control leaf: {diff}")
     if diff <= 4.75:
         print("diff <= 4.5, D8 is on")
