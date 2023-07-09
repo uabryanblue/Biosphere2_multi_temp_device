@@ -1,5 +1,6 @@
 # import machine
 from machine import Pin, SPI
+from math import isnan
 from time import sleep
 import conf
 
@@ -40,7 +41,7 @@ def catReadings(readings):
     strReadings = ''
     for key in readings.keys():
         strReadings =+ readings[key][2] # 2nd position is temp value
-    return strReading3rd
+    return strReadings
 
 def read_thermocouple(cs_pin, spi):
     """reads one thermocouple from given CS pin and spi object"""
@@ -95,19 +96,45 @@ def read_thermocouple(cs_pin, spi):
 
     return temp
 
+def allReadings(readings):
+    out = ''
+    for item in conf.readingsOrder:
+        out += str(item) + ', ' + str(readings[item][0]) + ', ' + str(readings[item][2]) + ',  '
+    return out
+
 
 def read_thermocouples(readings):
     """setup spi connection, read all thermocouples, close spi connection"""
+    # init variable to do averages and omit nan values
+    myReadings = readings
+    for key in myReadings.keys():
+        myReadings[key][2] = 0.0 # 3rd position is cumulative temp value
+        myReadings[key][1] = 0 # 2nd position is reading count for averaging
 
     tspi = SPI(1, baudrate=5000000, polarity=0, phase=0)
+    numSamples = 10
+    for i in range(numSamples):
+        for key in readings.keys():
+            cs_pin = readings[key][0] # first position is pin number
+            tRead = read_thermocouple(cs_pin, tspi)
 
-    # print(readings)
+            if not isnan(tRead): # TODO is it better to do this, or record nan due to hardware issues?
+                myReadings[key][2] += tRead
+                myReadings[key][1] += 1 # only increment if it is a non nan reading
+
+            # readings[key][2] += tRead # read_thermocouple(cs_pin, tspi) # 3rd position is temp value
+            # print(f'{key}: sensor: {readings[key][0]} temp: {readings[key][2]}')
+            sleep(0.250)  
+        print(allReadings(readings))
 
     for key in readings.keys():
-        cs_pin = readings[key][0] # first position is pin number
-        readings[key][2] = read_thermocouple(cs_pin, tspi) # 3rd position is temp value
-        print(f'{key}: temp: {readings[key][2]}')
-        # sleep(1)
+        if myReadings[key][1] > 0:
+            readings[key][2] = round(myReadings[key][2] / myReadings[key][1], 2)
+        else: # we didn't take any readings, therefore not a number
+            readings[key][2] = float("NaN")
+            
+        # readings[key][2] = round(readings[key][2] / numSamples, 2) 
+        
 
     # TODO need to place possible callibration call
     # callibration = []

@@ -63,9 +63,10 @@ while True:
     readings = thermocouple.read_thermocouples(readings)
 
   
-    temperature_data = ','.join([str(value[2]) for value in readings.values()])
+    # temperature_data = ', '.join([str(value[2]) for value in readings.values()])
+    temperature_data = thermocouple.allReadings(readings)
     date_time = realtc.formattime(time.localtime())
-    out = str(sequence) + ',' + date_time + ',' + temperature_data
+    out = str(sequence) + ', ' + date_time + ', ' + temperature_data
     print(out)
     espnowex.esp_tx(esp_con, out)
 
@@ -74,16 +75,9 @@ while True:
     # and if temperature above maximum value for heating due to other reasons.
     diff = readings['TREATMENT'][2] - readings['CONTROL'][2]
     print(f"CHECK TEMP DIFFERENCE - cont:{readings['CONTROL'][2]}, heat:{readings['TREATMENT'][2]}, DIFFERENCE: {diff}")
-    print(f"{str(diff)}, {diff}, {type(diff)}, {isnan(diff)}")
+    
     if isnan(diff) is True:
-        print("nan is true")
-        D8.on()
-        time.sleep(1)
-        D8.off()
-        time.sleep(1)
-        D8.on()
-        time.sleep(1)
-        D8.off()
+        D8.off() # trouble reading sensor, turn off for safety TODO generate error in system log
     elif readings['HEATER'][2] >= conf.TMAX_HEATER: # error state, shut down heater
         D8.off() # TODO record an ERROR in the system log
     elif readings['TREATMENT'][2] >= conf.TMAX: # warning leaf temp exceeded threshold, turn off heater
