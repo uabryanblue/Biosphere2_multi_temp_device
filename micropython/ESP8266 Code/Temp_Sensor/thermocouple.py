@@ -16,7 +16,7 @@ def temp_c(data):
     return temp * 0.25
 
 
-def callibrated_reading(temperature):
+def callibrated_reading(deviceId, temperature):
     """thermocouples may need callibrated
     coefficients should be stored in the config file
     2nd order can be used if non-linear
@@ -24,13 +24,12 @@ def callibrated_reading(temperature):
     # TODO need to pass in callibration parameters defined in some config file
     # callibrate each thermocouple using 2nd order polynomial
     # for linear, set first coefficiet to 0
-    coef2 = -0.01053
-    coef1 = 1.90714
-    offset = -15.35578
-    temp_corrected = (
-        (coef2 * temperature * temperature) + (coef1 * temperature) + offset
-    )  # sensor #1 5/19/2023
-    return temp_corrected
+    beta0 = conf.callibrations[deviceId][1]
+    beta1 = conf.callibrations[deviceId][2]
+    beta2 = conf.callibrations[deviceId][3]
+    tempCorrected = (beta0 + (beta1 * temperature) + (beta2 * temperature * temperature)) 
+
+    return tempCorrected
 
 def initReadings(readings):
     for key in readings.keys():
@@ -129,7 +128,11 @@ def read_thermocouples(readings):
 
     for key in readings.keys():
         if myReadings[key][1] > 0:
-            readings[key][2] = round(myReadings[key][2] / myReadings[key][1], 2)
+            avgReading = round(myReadings[key][2] / myReadings[key][1], 2)
+            # calReading = callibrated_re?eading(myReadings[key][3], avgReading)
+            # print(f"data key: {myReadings[key][3]}   key: {key}   avg: {avgReading}   cal: {calReading}")
+            readings[key][2] = avgReading
+            
         else: # we didn't take any readings, therefore not a number
             readings[key][2] = float("NaN")
             
@@ -142,4 +145,4 @@ def read_thermocouples(readings):
     # TODO put in some error checking to ensure spi is released
     tspi.deinit()
 
-    return readings
+    return readings, myReadings

@@ -82,14 +82,32 @@ readings = dict()
 # Define each dictionary element as a PIN, GPIO, TempValue
 # EXAMPLE:  readings['HEATER'] = [1, 16, 0.0]
 # key = HEATER, PIN = D0, GPIO 16, initial temp value = 0.0
-readings['HEATER'] = [1, 16, 0.0]
-readings['CONTROL'] = [2, 5, 0.0]
-readings['TREATMENT'] = [3, 4, 0.0]
+# SensorID = a unique ID used for identification of the thermocouple in that position
+#   See CALLIBRATION below
+readings['HEATER'] = [1, 16, 0.0, 101]
+readings['CONTROL'] = [2, 5, 0.0, 102]
+readings['TREATMENT'] = [3, 4, 0.0, 103]
 # two extra sensor locations, default D3 and D4
-readings['D3'] = [4, 0, 0.0]
-readings['D4'] = [5, 2, 0.0]
+readings['D3'] = [4, 0, 0.0, 104]
+readings['D4'] = [5, 2, 0.0, 105]
 
 # Output Order
 # this controls the 5 temperature sensor readings' output order
 # output will be a CSV with values corresponding to this order
 readingsOrder = ['TREATMENT', 'CONTROL', 'HEATER', 'D3', 'D4']
+
+# CALLIBRATION TABLE
+# Each thermocouple must be callibrated
+# A unique value for the ID, and the callibration coefficients need to be supplied
+# When taking a temperature reading, if an entry is not found, no adjustment will be applied
+    # Position = 1 through 5 denoting it was callibrated in this position of the board
+    # beta0 = -15.35578 - offset
+    # beta1 = 1.90714 - slope
+    # beta2 = -0.01053 - 2nd order, if needed, set to 0 for linear
+callibrations = dict()
+# TODO these values are not correct
+callibrations[101] = [1, 28.5, 0.262, 0]
+callibrations[102] = [2, 98.5, 4.20, 0]
+callibrations[103] = [3, 22.9, -0.0542, 0]
+callibrations[104] = [4, -14.1, -2.14, 0]
+callibrations[105] = [5, 21.3, -0.148, 0]

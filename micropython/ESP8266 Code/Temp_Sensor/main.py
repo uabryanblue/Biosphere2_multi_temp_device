@@ -60,11 +60,12 @@ print(f"Temp Sensor: the new time is: {realtc.formattime(time.localtime())}")
 sequence = 1 # record number from the last time the system restarted
 while True:
     readings = thermocouple.initReadings(conf.readings)
-    readings = thermocouple.read_thermocouples(readings)
+    readings, myReadings = thermocouple.read_thermocouples(readings)
 
   
     # temperature_data = ', '.join([str(value[2]) for value in readings.values()])
     temperature_data = thermocouple.allReadings(readings)
+    org_data = thermocouple.allReadings(myReadings)
     date_time = realtc.formattime(time.localtime())
     out = str(sequence) + ', ' + date_time + ', ' + temperature_data
     print(out)
