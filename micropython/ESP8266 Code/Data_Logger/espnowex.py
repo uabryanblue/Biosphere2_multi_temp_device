@@ -26,8 +26,8 @@ def init_esp_connection(sta):
     # MAC address of peer's wifi interface
     # example: b'\x5c\xcf\x7f\xf0\x06\xda'
     # TODO peers should be in the conf file
-    # peer = b'\x8c\xaa\xb5M\x7f\x18' # my esp8266 #2
-    # peer = b'\x8c\xaa\xb5M\x7f\x18' 
+    # peer = b'\x8c\xaa\xb5M\x7f\x18'  # my #2 esp8266
+    # peer = b'\xec\xfa\xbc\xcb\xab\xce' # 1st datalogger
     peer = b'\xc4[\xbe\xe4\xfdq'
     e.add_peer(peer) # register the peer for espnow communication
 
@@ -47,16 +47,15 @@ def get_mac(wlan_sta):
 
 
 def esp_tx(e, msg):
-    print("start esp_tx")
 
+    # TODO add support for TX to multiple peers
     # # MAC address of peer1's wifi interface exmaple:
     # # peer1 = b'\xe8\x68\xe7\x4e\xbb\x19'
     # the receiver MAC address
-    # peer = b'\x8c\xaa\xb5M\x7f\x18' # my esp8266 #2
-    # peer = b'\x8c\xaa\xb5M\x7f\x18'
-    peer = b'\xc4[\xbe\xe4\xfdq'  
+    # peer = b'\x8c\xaa\xb5M\x7f\x18'  # my #2 esp8266
+    # peer = b'\xec\xfa\xbc\xcb\xab\xce' # 1st datalogger
+    peer = b'\xc4[\xbe\xe4\xfdq'
 
-    print("Starting...")            # Send to all peers
     try:
         res = e.send(peer, msg, True)  # transmit data and check receive status
         if not res:
@@ -70,16 +69,15 @@ def esp_tx(e, msg):
         else:  # general case, close the socket and continue processing, prevent hanging
             print(f"ERROR: {err}")
 
-    print("done exp_tx")
+    return res
 
 
-def esp_rx(esp_con):
+def esp_rx(esp_con, timeout=1000):
     """init of esp connection needs performed first
     peers need to be added to the espnow connection"""
 
     # wait for a message to process
-    # while True:
-    host, msg = esp_con.recv()
+    host, msg = esp_con.recv(timeout) # ms timeout on receive
     # TODO change this to trap for errors, no need to check the msg
     if msg:
         if msg == b'get_time':
