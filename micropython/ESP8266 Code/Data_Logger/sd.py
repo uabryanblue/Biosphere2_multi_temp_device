@@ -15,7 +15,7 @@ def initSD(mnt):
     os.mount(vfs, mnt)
     # os.listdir(mnt)
     # time.sleep(0.2)
-    list_root = os.listdir()
+    # list_root = os.listdir()
     listFiles = os.listdir(mnt)
     if len(listFiles) > 0:
         print(f"file(s) in {mnt} {listFiles}")
@@ -25,6 +25,7 @@ def initSD(mnt):
 
 def closeSD(mnt):
     try:
+        print(f"unmounting {mnt}")
         os.umount(mnt)
     except OSError as e:
         if e.args[0] == uerrno.ETIMEDOUT:  # standard timeout is okay, ignore it

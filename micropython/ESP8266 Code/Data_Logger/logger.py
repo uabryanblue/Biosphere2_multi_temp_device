@@ -1,6 +1,8 @@
 import os
 import realtc
 import time
+import sd
+import conf
 
 # documentation of system call for total space from root '//'
 # os.statvfs('//')
@@ -41,11 +43,12 @@ def get_total_space(mnt):
 
 def write_log(filename, data):
     """write out a CSV record starting with current system"""
-
+    mnt = '/' + conf.LOG_MOUNT
+    sd.initSD(mnt)
     with open(filename, "a") as f:
         f.write(f"{realtc.formattime(time.localtime())},{data}")
         f.write("\n")
-
+    sd.closeSD(mnt)
 
 
 def cat_log(filename):

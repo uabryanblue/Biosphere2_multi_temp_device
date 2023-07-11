@@ -31,14 +31,14 @@ print("set time")
 
 # attach SD card module and mount the SD card, if one is present
 # TODO error trapping and what to do if there isn't one to use?
-mnt = '/' + conf.LOG_MOUNT
-print(f"unmount: {mnt}")
-sd.closeSD(mnt)
-print(f"mount: {mnt}")
-try:
-    sd.initSD(mnt)
-except OSError as e:
-    print(f"OSError: Connection closed {e}")
-    sys.exit(0)
+# mnt = '/' + conf.LOG_MOUNT
+# print(f"unmount: {mnt}")
+# sd.closeSD(mnt)
+# print(f"mount: {mnt}")
+# try:
+#     sd.initSD(mnt)
+# except OSError as e:
+#     print(f"OSError: Connection closed {e}")
+#     sys.exit(0)
 
 # sleep(0.5)

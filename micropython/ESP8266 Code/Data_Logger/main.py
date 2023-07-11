@@ -36,8 +36,7 @@ while True:
         str_host = ':'.join(['{:02x}'.format(b) for b in host])
         # D0.off() # turn on indicate a message was received
     else:
-        msg = b'ERROR' # TODO error should be set to syslog
-        print(f"-------------- RECEIVE FAILED with host:{host}")
+        msg = b'ERROR' # TODO error should be generic
     
     # assumption data is utf-8, if not, it may fail
     str_msg = msg.decode('utf-8')
@@ -51,7 +50,7 @@ while True:
         D0.on() # turn led off, finished rquest
         print("Data Logger: time sent")
     elif msg == b'ERROR': # TODO generic trap
-        print("TIMEOUT") # normally this is a timeout, just continue
+        print("No Messages") # normally this is a timeout, just continue
     else:
         try:
             D0.off() # turn on indicate a message was received
@@ -63,6 +62,7 @@ while True:
                 print("ETIMEDOUT found")  # timeout is okay, ignore it
             else:  # general case, continue processing, prevent hanging
                 print(f"-------------- WRITE LOG ERROR: {e}")
+                sleep(5)
         
 
 
