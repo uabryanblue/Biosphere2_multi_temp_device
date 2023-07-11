@@ -5,6 +5,7 @@
 # HiLetgo DS3231 + AT24C32N
 
 # to set the time on the DS3231 use a tuple as shown here
+# i2c = I2C(sda=machine.Pin(4), scl=machine.Pin(5))
 # d = DS3231(i2c)
 # d.set_time((YY, MM, DD, hh, mm, ss, 0, 0))
 # set time to 2023, May, 29, 7 am, 11 minutes, 1 second, NA, NA
