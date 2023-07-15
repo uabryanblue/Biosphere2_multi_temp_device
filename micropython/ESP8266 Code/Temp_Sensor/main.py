@@ -102,7 +102,7 @@ def main():
         #     print("diff >= 4.75 D8 is off")
         #     D8.off()
         sequence += 1
-        time.sleep(2)
+        time.sleep(5)
 
 if __name__ == "__main__":
     try:
