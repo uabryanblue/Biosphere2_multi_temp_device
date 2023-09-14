@@ -95,36 +95,39 @@ def read_thermocouple(cs_pin, spi):
 
     return temp
 
-def allReadings(readings):
-    out = ''
+def allReadings(readings, prefix=''):
+    """join all reading values in the order specified by the configuration values in readsingsOrder
+    prefix is the default for the output string and should not contain a delimiter"""
+    out = prefix + ","
     for item in conf.readingsOrder:
-        out += str(item) + ', ' + str(readings[item][0]) + ', ' + str(readings[item][2]) + ',  '
+        out = ','.join([str(readings[item][2]) for item in conf.readingsOrder])
     return out
 
 
 def read_thermocouples(readings):
-    """setup spi connection, read all thermocouples, close spi connection"""
-    # init variable to do averages and omit nan values
+    """setup spi connection, read all thermocouples, close spi connection
+    nan values are only given if all values that are read are nan otherwise
+    the average of all readings not nan are returned"""
+    # create variable to do averages based on readings structure
     myReadings = readings
+    # initialization for those values that need to be reset
     for key in myReadings.keys():
         myReadings[key][2] = 0.0 # 3rd position is cumulative temp value
-        myReadings[key][1] = 0 # 2nd position is reading count for averaging
-
+        myReadings[key][1] = 0   # 2nd position is reading count for averaging
+    
     tspi = SPI(1, baudrate=5000000, polarity=0, phase=0)
-    numSamples = 10
+    numSamples = 10 # specifiy the number of readings to take and average
     for i in range(numSamples):
         for key in readings.keys():
             cs_pin = readings[key][0] # first position is pin number
             tRead = read_thermocouple(cs_pin, tspi)
 
-            if not isnan(tRead): # TODO is it better to do this, or record nan due to hardware issues?
+            if not isnan(tRead): # only increment true values and ignore nan values
                 myReadings[key][2] += tRead
-                myReadings[key][1] += 1 # only increment if it is a non nan reading
+                myReadings[key][1] += 1
 
-            # readings[key][2] += tRead # read_thermocouple(cs_pin, tspi) # 3rd position is temp value
-            # print(f'{key}: sensor: {readings[key][0]} temp: {readings[key][2]}')
-            sleep(0.250)  
-        print(allReadings(readings))
+            sleep(0.250) # 250 ms delay before next reading, can be modified
+        print(allReadings(readings)) # TODO debug output
 
     for key in readings.keys():
         if myReadings[key][1] > 0:
@@ -135,13 +138,7 @@ def read_thermocouples(readings):
             
         else: # we didn't take any readings, therefore not a number
             readings[key][2] = float("NaN")
-            
-        # readings[key][2] = round(readings[key][2] / numSamples, 2) 
-        
-
-    # TODO need to place possible callibration call
-    # callibration = []
-
+                  
     # TODO put in some error checking to ensure spi is released
     tspi.deinit()
 
